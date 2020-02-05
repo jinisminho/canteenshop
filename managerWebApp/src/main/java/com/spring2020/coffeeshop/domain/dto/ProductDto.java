@@ -31,9 +31,7 @@ public class ProductDto {
     private boolean isAvailable;
 
     @Valid
+    @NotNull
     private CategoryDto category;
-
-    @Valid
-    private ProductImageDto productImage;
 
 }

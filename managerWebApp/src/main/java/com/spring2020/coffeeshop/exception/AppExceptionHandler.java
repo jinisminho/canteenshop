@@ -2,19 +2,19 @@ package com.spring2020.coffeeshop.exception;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class will catch all exception of the project
@@ -42,19 +42,20 @@ public class AppExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity handleException(MethodArgumentNotValidException exception) {
-        List<String> errorList = exception.getBindingResult().getAllErrors().stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.toList());
-        logger.error(errorList);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorList);
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError fieldError : exception.getBindingResult().getFieldErrors()) {
+            errors.put(fieldError.getObjectName() + "." + fieldError.getField(),
+                    fieldError.getDefaultMessage());
+        }
+        logger.error(errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
     @ResponseBody
     @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity handleException(ConstraintViolationException exception) {
         logger.error(exception.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage()
-                .substring(exception.getMessage().indexOf(':') + 1));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ResponseBody
