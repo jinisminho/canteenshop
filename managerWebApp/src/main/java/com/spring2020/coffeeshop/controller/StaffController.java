@@ -11,7 +11,7 @@ import javax.validation.Valid;
 import static com.spring2020.coffeeshop.util.ConstantUtil.CREATE_SUCCESS;
 
 @RestController
-@RequestMapping("/staffs")
+@RequestMapping("/api/staffs")
 public class StaffController {
 
     @Autowired

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/cancelReasons")
+@RequestMapping("/api/cancelReasons")
 public class CancelReasonController {
 
     @Autowired

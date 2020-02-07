@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import static com.spring2020.coffeeshop.util.ConstantUtil.DATE_TIME_PATTERN;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
 
     @Autowired

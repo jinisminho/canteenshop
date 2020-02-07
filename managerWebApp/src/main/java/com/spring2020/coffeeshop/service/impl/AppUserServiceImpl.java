@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring2020.coffeeshop.domain.dto.AppUserDto;
 import com.spring2020.coffeeshop.domain.entity.AppUser;
 import com.spring2020.coffeeshop.domain.entity.Staff;
-import com.spring2020.coffeeshop.domain.enums.UserType;
+import com.spring2020.coffeeshop.domain.enums.UserTypeEnum;
 import com.spring2020.coffeeshop.exception.ResourceNotFoundException;
 import com.spring2020.coffeeshop.repository.AppUserRepository;
 import com.spring2020.coffeeshop.repository.StaffRepository;
@@ -36,13 +36,13 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
-    public Page<AppUserDto> findAppUserByName(String name, UserType userType, Pageable pageable) {
+    public Page<AppUserDto> findAppUserByName(String name, UserTypeEnum userType, Pageable pageable) {
         return appUserRepository.findByNameAndUserType(name, userType.toString(), pageable)
                 .map(appUser -> mapper.convertValue(appUser, AppUserDto.class));
     }
 
     @Override
-    public Page<AppUserDto> findAllAppUsers(UserType userType, Pageable pageable) {
+    public Page<AppUserDto> findAllAppUsers(UserTypeEnum userType, Pageable pageable) {
         return appUserRepository.findByUserType(userType, pageable)
                 .map(appUser -> mapper.convertValue(appUser, AppUserDto.class));
     }
@@ -50,11 +50,11 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     @Transactional
-    public void updateAppUserStatus(UserType userType, long id, boolean status) {
+    public void updateAppUserStatus(UserTypeEnum userType, long id, boolean status) {
         AppUser appUser = findAppUserByIdReturnAppUser(id);
         appUser.setActive(status);
         appUserRepository.save(appUser);
-        if (userType == UserType.STAFF) {
+        if (userType == UserTypeEnum.STAFF) {
             Staff staff = staffRepository.findByAppUserId(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Staff not found"));
             if (status) {
