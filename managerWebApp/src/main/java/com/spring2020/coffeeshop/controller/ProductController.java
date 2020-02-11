@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import static com.spring2020.coffeeshop.util.ConstantUtil.UPDATE_SUCCESS;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/products")
 public class ProductController {
 
     @Autowired

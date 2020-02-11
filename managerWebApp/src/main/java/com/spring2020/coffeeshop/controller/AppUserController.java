@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.spring2020.coffeeshop.util.ConstantUtil.UPDATE_SUCCESS;
 
 @RestController
-@RequestMapping("/api/appUsers")
+@RequestMapping("/appUsers")
 public class AppUserController {
 
     @Autowired

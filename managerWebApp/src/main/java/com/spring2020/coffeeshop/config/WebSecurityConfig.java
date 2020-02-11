@@ -1,5 +1,6 @@
 package com.spring2020.coffeeshop.config;
 
+import com.spring2020.coffeeshop.domain.enums.UserTypeEnum;
 import com.spring2020.coffeeshop.security.CustomUserDetailsService;
 import com.spring2020.coffeeshop.security.JwtAuthenticationEntryPoint;
 import com.spring2020.coffeeshop.security.JwtAuthenticationFilter;
@@ -71,8 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/api/auth/**").permitAll()
-                .anyRequest().hasRole("MANAGER");
+                .antMatchers("/auth/**").permitAll()
+                .anyRequest().hasRole(UserTypeEnum.MANAGER.toString());
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

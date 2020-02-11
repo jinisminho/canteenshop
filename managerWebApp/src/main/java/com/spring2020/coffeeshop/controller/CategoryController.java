@@ -13,7 +13,7 @@ import static com.spring2020.coffeeshop.util.ConstantUtil.DELETE_SUCCESS;
 import static com.spring2020.coffeeshop.util.ConstantUtil.UPDATE_SUCCESS;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired

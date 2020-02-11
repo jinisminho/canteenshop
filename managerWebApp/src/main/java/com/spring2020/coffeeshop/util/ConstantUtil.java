@@ -20,4 +20,6 @@ public class ConstantUtil {
     //Store image of product
     public static final String IMAGE_DIRECTORY = "C:\\Users\\ADMIN\\Desktop\\test\\";
 
+    public static final String TOKEN_TYPE = "Bearer";
+
 }

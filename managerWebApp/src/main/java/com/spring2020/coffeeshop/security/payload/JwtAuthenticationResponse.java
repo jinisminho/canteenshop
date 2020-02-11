@@ -1,28 +1,29 @@
 package com.spring2020.coffeeshop.security.payload;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.Date;
+
+import static com.spring2020.coffeeshop.util.ConstantUtil.TOKEN_TYPE;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class JwtAuthenticationResponse {
 
     private String accessToken;
-    private String tokenType = "Bearer";
+    private String tokenType = TOKEN_TYPE;
+    private Long userId;
+    private Date expiryDate;
 
-    public JwtAuthenticationResponse(String accessToken) {
+    public JwtAuthenticationResponse(String accessToken, Long userId, Date expiryTime) {
         this.accessToken = accessToken;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public String getTokenType() {
-        return tokenType;
-    }
-
-    public void setTokenType(String tokenType) {
-        this.tokenType = tokenType;
+        this.userId = userId;
+        this.expiryDate = expiryTime;
     }
 }
