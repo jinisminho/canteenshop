@@ -10,4 +10,5 @@ import lombok.Setter;
 public class JwtResponseDto
 {
     private String token;
+    StaffProfileDto staffProfileDto;
 }

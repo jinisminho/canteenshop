@@ -46,4 +46,9 @@ public class AppUser extends Audit
 
     @Column(nullable = false, length = 20)
     private String userType;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "app_role_id")
+    private AppRole appRole;
+
 }
