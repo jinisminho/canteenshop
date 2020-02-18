@@ -1,5 +1,6 @@
 package com.spring2020.coffeeshop.domain.entity;
 
+import com.spring2020.coffeeshop.domain.enums.RoleNameEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,6 @@ public class AppRole {
     private Integer id;
 
     @Column(nullable = false, length = 50)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleNameEnum name;
 }

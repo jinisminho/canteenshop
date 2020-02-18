@@ -1,6 +1,7 @@
 package com.spring2020.coffeeshop.domain.enums;
 
-public enum UserType {
+public enum UserTypeEnum {
     STAFF,
-    CUSTOMER
+    CUSTOMER,
+    MANAGER
 }
