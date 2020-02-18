@@ -19,27 +19,31 @@ import java.util.stream.Collectors;
  * then send response to client with messages, HttpStatus,..
  */
 @RestControllerAdvice
-public class AppExceptionHandler {
+public class AppExceptionHandler
+{
 
     private static final Logger logger = LogManager.getLogger(AppExceptionHandler.class);
 
     @ResponseBody
     @ExceptionHandler(value = MissingInputException.class)
-    public ResponseEntity handleException(MissingInputException exception) {
+    public ResponseEntity handleException(MissingInputException exception)
+    {
         logger.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
     }
 
     @ResponseBody
     @ExceptionHandler(value = ResourceNotFoundException.class)
-    public ResponseEntity handleException(ResourceNotFoundException exception) {
+    public ResponseEntity handleException(ResourceNotFoundException exception)
+    {
         logger.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity handleException(MethodArgumentNotValidException exception) {
+    public ResponseEntity handleException(MethodArgumentNotValidException exception)
+    {
         List<String> errorList = exception.getBindingResult().getAllErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
@@ -49,7 +53,8 @@ public class AppExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = ConstraintViolationException.class)
-    public ResponseEntity handleException(ConstraintViolationException exception) {
+    public ResponseEntity handleException(ConstraintViolationException exception)
+    {
         logger.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage()
                 .substring(exception.getMessage().indexOf(':') + 1));

@@ -12,7 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "App_User")
-public class AppUser extends Audit {
+public class AppUser extends Audit
+{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,8 +42,13 @@ public class AppUser extends Audit {
     private GenderEnum gender;
 
     @Column(nullable = false)
-    private boolean isActivate;
+    private boolean isActive;
 
     @Column(nullable = false, length = 20)
     private String userType;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "app_role_id")
+    private AppRole appRole;
+
 }

@@ -1,0 +1,12 @@
+
+staffWebApp/.idea/
+
+managerWebApp/.idea/
+
+managerWebApp/coffee-shop.iml
+
+staffWebApp/target/test-classes/com/spring2020/staffwebapp/coffee/shop/LinhTinh.class
+
+staffWebApp/target/
+
+staffWebApp/src/test/java/com/spring2020/staffwebapp/coffee/shop/LinhTinh.java

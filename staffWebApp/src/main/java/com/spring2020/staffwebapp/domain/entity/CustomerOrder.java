@@ -1,10 +1,12 @@
 package com.spring2020.staffwebapp.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
@@ -23,7 +25,7 @@ public class CustomerOrder extends Audit {
     @Column(nullable = false, length = 500)
     private String location;
 
-    @Column(nullable = true, length = 500)
+    @Column(length = 500)
     private String note;
 
     @Column(nullable = false)
@@ -48,4 +50,6 @@ public class CustomerOrder extends Audit {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+
 }

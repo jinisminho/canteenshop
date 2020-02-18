@@ -1,13 +1,11 @@
 package com.spring2020.staffwebapp.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -15,7 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "Product")
-public class Product extends Audit {
+public class Product extends Audit
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,20 +31,15 @@ public class Product extends Audit {
     @Column(nullable = false)
     private boolean isAvailable;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @ManyToOne(
             fetch = FetchType.LAZY,
             cascade = {CascadeType.PERSIST, CascadeType.MERGE}
     )
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @OneToMany(
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-            orphanRemoval = true,
-            mappedBy = "product"
-    )
-    @JsonManagedReference(value = "productImages")
-    private List<ProductImage> productImages;
-
+    @JoinColumn(name = "product_image_id")
+    private ProductImage productImage;
 
 }
