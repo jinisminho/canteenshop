@@ -10,7 +10,7 @@ import SweetAlert from 'sweetalert-react';
 import { Navbar, FormGroup, FormControl, Alert } from 'react-bootstrap'
 import CategoryModal from '../Components/Modal/CategoryModal'
 
-class Categories extends Component {
+class Customer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -121,9 +121,9 @@ class Categories extends Component {
             nextPage: 'Next',
             firstPage: 'First',
             lastPage: 'Last',
-            hideSizePerPage: true,
+            hideSizePerPage: false,
         };
-
+        console.log("Data: " + this.props.data)
         let display = (
             <div className="content">
                 <div className="row">
@@ -142,7 +142,7 @@ class Categories extends Component {
                         </button>
                     </div>
                 </div>
-
+                console.log("Data"+this.props.data)
                 <br />
                 <BootstrapTable
                     data={this.props.data}
@@ -154,8 +154,12 @@ class Categories extends Component {
                     hover
                     condensed
                 >
-                    <TableHeaderColumn dataField="id" isKey dataAlign="center" width="15%">Id</TableHeaderColumn>
-                    <TableHeaderColumn dataField="name" dataAlign="center" width="50%">Category</TableHeaderColumn>
+                    <TableHeaderColumn dataField="id" isKey dataAlign="center" width="10%">Id</TableHeaderColumn>
+                    <TableHeaderColumn dataField="firstName" dataAlign="center" width="20%">First Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField="lastName" dataAlign="center" width="20%">Last Name</TableHeaderColumn>
+                    <TableHeaderColumn dataField="gender" dataAlign="center" width="10%">Gender</TableHeaderColumn>
+                    <TableHeaderColumn dataField="phone" dataAlign="center" width="25%">Phone</TableHeaderColumn>
+                    <TableHeaderColumn dataField="email" dataAlign="center" width="30%">Email</TableHeaderColumn>
                     <TableHeaderColumn dataField='active' dataAlign="center" dataFormat={this.activeFormatter} width="15%">Action</TableHeaderColumn>
                 </BootstrapTable>
                 {/* delete popup */}
@@ -202,7 +206,7 @@ class Categories extends Component {
                     <div className="col-md-12">
                         <div className="card">
                             <div className="header">
-                                <h4>Categories</h4>
+                                <h4>Customers</h4>
                             </div>
                             {errorMsg}
                             {successMsg}
@@ -217,25 +221,22 @@ class Categories extends Component {
 }
 const mapStateToProps = state => {
     return {
-        loading: state.category.loading,
-        data: state.category.data,
-        error: state.category.error,
-        totalSize: state.category.total,
-        page: state.category.page,
-        sizePerPage: state.category.sizePerPage,
-        deleteSuccess: state.category.deleteSuccess,
-        updateSuccess: state.category.updateSuccess,
-        addSuccess: state.category.addSuccess
+        loading: state.customerAction.loading,
+        data: state.customerAction.data,
+        error: state.customerAction.error,
+        totalSize: state.customerAction.total,
+        page: state.customerAction.page,
+        sizePerPage: state.customerAction.sizePerPage,
+        deleteSuccess: state.customerAction.deleteSuccess,
+        updateSuccess: state.customerAction.updateSuccess,
+        addSuccess: state.customerAction.addSuccess
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchData: (page, size, search) => dispatch(actions.getCategories(page, size, search)),
-        onDeleteCategory: (id) => dispatch(actions.deleteCategory(id)),
-        onUpdateCategory: (data) => dispatch(actions.updateCategory(data)),
-        onAddCategory: (data) => dispatch(actions.addCategory(data))
+        onFetchData: (page, size, search) => dispatch(actions.getCustomers(page, size, search))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Categories)
+export default connect(mapStateToProps, mapDispatchToProps)(Customer)

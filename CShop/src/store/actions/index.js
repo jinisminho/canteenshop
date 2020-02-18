@@ -1,5 +1,6 @@
-export {addIngredient,
-     removeIngredient,
+export {
+    addIngredient,
+    removeIngredient,
     initIngredients
 } from './burgerBuilder'
 export {
@@ -22,3 +23,7 @@ export {
     updateCategory,
     addCategory
 } from './category'
+
+export {
+    getCustomers
+} from './customerAction'
