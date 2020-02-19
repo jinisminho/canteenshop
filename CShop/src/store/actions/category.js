@@ -58,6 +58,7 @@ export const deleteCategorySuccess = () => {
         type: actionTypes.DELETE_CATEGORY_SUCCESS,
     })
 }
+
 export const deleteCategory = (id) => {
     return dispatch => {
         dispatch(deleteCategoryStart())

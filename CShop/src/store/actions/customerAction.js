@@ -11,6 +11,7 @@ export const getCustomersSuccess = (data, total, page, sizePerPage) => {
     }
 }
 
+
 export const getCustomersFail = (error) => {
     return {
         type: actionTypes.GET_CUSTOMER_FAILED,
@@ -22,6 +23,23 @@ export const getCustomersStart = () => {
     return {
         type: actionTypes.GET_CUSTOMER_START
     }
+}
+
+export const updateCustomerStart = () => {
+    return ({
+        type: actionTypes.UPDATE_CUSTOMER_START
+    })
+}
+export const updateCustomerFail = (error) => {
+    return ({
+        type: actionTypes.UPDATE_CUSTOMER_FAILED,
+        error: error
+    })
+}
+export const updateCustomerSuccess = () => {
+    return ({
+        type: actionTypes.UPDATE_CUSTOMER_SUCCESS,
+    })
 }
 
 export const getCustomers = (page, size, search) => {
@@ -40,6 +58,25 @@ export const getCustomers = (page, size, search) => {
             })
             .catch(error => {
                 dispatch(getCustomersFail(error))
+            });
+    }
+}
+
+export const changeCustomerStatus = (id, isActive) => {
+    return dispatch => {
+        dispatch(updateCustomerStart())
+        let url = '/appUsers/update/' + id + '?isActive=' + isActive + '&userType=CUSTOMER'
+        console.log(url)
+        axios.get(url, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+            }
+        })
+            .then(response => {
+                dispatch(updateCustomerSuccess())
+            })
+            .catch(error => {
+                dispatch(updateCustomerFail(error))
             });
     }
 }

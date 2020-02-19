@@ -35,9 +35,8 @@ export const logout = () => {
 export const checkAuthTimeOut = (expirationTime) => {
     return dispatch => {
         setTimeout(() => {
-            console.log("time: " + expirationTime)
             dispatch(logout())
-        }, expirationTime * 1000)
+        }, expirationTime)
     }
 }
 
@@ -75,8 +74,6 @@ export const setAuthRedirectPath = (path) => {
 }
 
 export const authCheckState = () => {
-    console.log('aaa')
-
     return dispatch => {
         const token = localStorage.getItem('accessToken')
         if (!token) {
@@ -89,7 +86,7 @@ export const authCheckState = () => {
             } else {
                 const userId = localStorage.getItem('userId')
                 dispatch(authSuccess(token, userId))
-                dispatch(checkAuthTimeOut((expiryDate.getTime() + new Date().getTime() / 1000)))
+                dispatch(checkAuthTimeOut((expiryDate.getTime() - (new Date().getTime()))))
             }
         }
     }
@@ -128,12 +125,12 @@ export const changePassword = (id, newPass) => {
         // }
         axios.post(url, changeData)
             .then(response => {
-                const expiryDate = new Date(new Date().getTime() + response.data.expiryDate * 1000)
+                const expiryDate = new Date(response.data.expiryDate)
                 localStorage.setItem('accessToken', response.data.accessToken)
                 localStorage.setItem('expiryDate', expiryDate)
                 localStorage.setItem('userId', response.data.userId)
                 dispatch(changePasswordSuccess(response.data.accessToken, response.data.userId))
-                dispatch(checkAuthTimeOut(response.data.expiresIn))
+                dispatch(checkAuthTimeOut(response.data.expiryDate - (new Date().getTime())))
             })
             .catch(err => {
                 dispatch(changePasswordFailed(err.response.data.error))

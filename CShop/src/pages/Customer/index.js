@@ -9,6 +9,8 @@ import UpdateButton from '../../components/Button/UpdateButton'
 import SweetAlert from 'sweetalert-react';
 import { Navbar, FormGroup, FormControl, Alert } from 'react-bootstrap'
 import CategoryModal from '../Components/Modal/CategoryModal'
+import Switch from 'components/Switch';
+import SwitchControl from "components/Switch";
 
 class Customer extends Component {
     constructor(props) {
@@ -56,18 +58,23 @@ class Customer extends Component {
     }
     activeFormatter(cell, row) {
         return (
-            <div>
-                <UpdateButton clicked={() => this.setState({
-                    updateFormShow: true,
-                    updateData: row
-                })} />
-                <DeleteButton clicked={() => this.setState({
-                    confirmDelete: true,
-                    deleteId: row.id
-                })} />
+            <div className="col-md-4">
+                <SwitchControl
+                    value={row.active}
+                    onChange={() => {
+                        this.handleChangeSwitch(row.id, !row.active);
+                    }}
+                />
             </div>
-        )
+        );
     }
+
+    handleChangeSwitch = (id, isActive) => {
+        console.log(id + "-" + isActive);
+        this.props.onChangeStatus(id, isActive);
+        //this.fetchData();
+    };
+
     handleUpdateCancel = () => {
         this.setState({
             updateFormShow: false,
@@ -130,19 +137,18 @@ class Customer extends Component {
                     <div className="col-md-4 col-lg-4">
                         <Navbar.Form pullLeft>
                             <FormGroup>
-                                <FormControl value={this.state.searchValue ? this.state.searchValue : ""} onChange={(event => this.inputChangedHandler(event))} type="text" placeholder="Type to search" />
+                                <FormControl value={this.state.searchValue ? this.state.searchValue : ""} onChange={(event => this.inputChangedHandler(event))} type="text" placeholder="search by name" />
                                 <button onClick={() => this.handleSearch()} className="btn btn-simple  "><span><i className="fa fa-search"></i></span></button>
                             </FormGroup>
                         </Navbar.Form>                    </div>
-                    <div className="col-md-4 col-lg-4 pull-right">
+                    {/* <div className="col-md-4 col-lg-4 pull-right">
                         <button onClick={() => this.setState({ addFormShow: true })}
                             type="button" className="btn btn-info btn-fill btn-wd pull-right" >
                             <span className="btn-label">
                             </span> <i className="fa fa-plus"></i> Add Category
                         </button>
-                    </div>
+                    </div> */}
                 </div>
-                console.log("Data"+this.props.data)
                 <br />
                 <BootstrapTable
                     data={this.props.data}
@@ -160,7 +166,7 @@ class Customer extends Component {
                     <TableHeaderColumn dataField="gender" dataAlign="center" width="10%">Gender</TableHeaderColumn>
                     <TableHeaderColumn dataField="phone" dataAlign="center" width="25%">Phone</TableHeaderColumn>
                     <TableHeaderColumn dataField="email" dataAlign="center" width="30%">Email</TableHeaderColumn>
-                    <TableHeaderColumn dataField='active' dataAlign="center" dataFormat={this.activeFormatter} width="15%">Action</TableHeaderColumn>
+                    <TableHeaderColumn dataField='active' dataAlign="center" dataFormat={this.activeFormatter} width="10%">Action</TableHeaderColumn>
                 </BootstrapTable>
                 {/* delete popup */}
                 <SweetAlert
@@ -235,7 +241,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchData: (page, size, search) => dispatch(actions.getCustomers(page, size, search))
+        onFetchData: (page, size, search) => dispatch(actions.getCustomers(page, size, search)),
+        onChangeStatus: (id, isActive) => dispatch(actions.changeCustomerStatus(id, isActive))
     }
 }
 

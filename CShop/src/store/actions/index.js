@@ -25,5 +25,6 @@ export {
 } from './category'
 
 export {
+    changeCustomerStatus,
     getCustomers
 } from './customerAction'
