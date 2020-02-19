@@ -21,8 +21,8 @@ import static springfox.documentation.spi.DocumentationType.SWAGGER_2;
 public class SwaggerConfig
 {
     @Bean
-    public Docket jsonApi()
-    {
+    public Docket jsonApi() {
+
         return new Docket(SWAGGER_2)
                 .securitySchemes(singletonList(new ApiKey("JWT", AUTHORIZATION, HEADER.name())))
                 .securityContexts(singletonList(
@@ -41,4 +41,6 @@ public class SwaggerConfig
                 .paths(PathSelectors.any())
                 .build();
     }
+
+
 }
