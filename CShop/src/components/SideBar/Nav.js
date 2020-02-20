@@ -96,6 +96,25 @@ class Nav extends Component {
             </div>
           </Collapse>
         </li>
+        <li className={this.isPathActive('/orders') || this.state.componentMenuOpen ? 'active' : null}>
+          <a onClick={() => this.setState({ orderMenuOpen: !this.state.orderMenuOpen })}
+            data-toggle="collapse">
+            <i className="pe-7s-users"></i>
+            <p>
+              Order
+            <b className="caret"></b>
+            </p>
+          </a>
+          <Collapse in={this.state.orderMenuOpen}>
+            <div>
+              <ul className="nav">
+                <li className={this.isPathActive('Order/OrderList') ? 'active' : null}>
+                  <Link to="Order/OrderList">Order</Link>
+                </li>
+              </ul>
+            </div>
+          </Collapse>
+        </li>
         <li className={this.isPathActive('/maps') || this.state.mapMenuOpen ? 'active' : null}>
           <a onClick={() => this.setState({ mapMenuOpen: !this.state.mapMenuOpen })} data-toggle="collapse">
             <i className="pe-7s-map-marker"></i>

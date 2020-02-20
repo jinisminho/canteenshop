@@ -25,6 +25,7 @@ import Logout from '../Auth/Logout/Logout'
 import ChangePassword from '../Auth/ChangePassword/ChangePassword'
 import * as actions from '../../store/actions/index'
 import Product from '../Product';
+import Order from '../Order/Order';
 class Main extends Component {
   componentDidMount() {
     this.props.onTryAutoSignUp()
@@ -63,6 +64,7 @@ class Main extends Component {
             <Route path="/maps" component={MapsPage} />
             <Route path="/charts" component={Charts} />
             <Route path="/calendar" component={Calendar} />
+            <Route path="/order" component={Order} />
             <Footer />
           </div>
         </div>

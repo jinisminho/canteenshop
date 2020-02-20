@@ -22,3 +22,8 @@ export {
     updateCategory,
     addCategory
 } from './category'
+
+export {
+    getOrders,
+    getCancelReason
+} from './order'
