@@ -52,7 +52,7 @@ public class OrderController
         return orderInfoService.findOrdersByStatus(orderStatusEnum, pageable);
     }
 
-    @PostMapping("/editStatus")
+    @GetMapping("/editStatus")
     @ApiOperation(value = "Change an order status")
     public DbResponseDto editOrderStatus(
             @RequestParam(value = "Id") @ApiParam(required = true, value = "Order id", example = "1") long id

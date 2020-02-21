@@ -103,6 +103,14 @@ public class OrderCheckoutServiceImpl implements OrderCheckoutService
             /*==========================*/
             return customerOrder;
 
+        }else if (staff.isPresent()){
+            /*Set data for customer order*/
+            customerOrder.setLocation(request.getLocation());
+            customerOrder.setNote(request.getNote());
+            customerOrder.setTotalPrice(totalPrice);
+            customerOrder.setStaff(staff.get());
+            /*==========================*/
+            return customerOrder;
         }
         return null;
     }
