@@ -7,6 +7,8 @@ import Spinner from '../../components/Spinner/Spinner'
 import { Navbar,FormGroup, FormControl, Alert } from 'react-bootstrap'
 import ReasonModal from '../Components/Modal/ReasonModal'
 import OrderDetailModal from '../Components/Modal/OrderDetailModal';
+import Datetime from 'react-datetime';
+import "react-datetime/css/react-datetime.css";
 
 class Orders extends Component {
     constructor(props) {
@@ -43,15 +45,16 @@ class Orders extends Component {
         this.props.onFetchData(page - 1, sizePerPage, startDate, endDate)
     }
     handlePageChange(page, sizePerPage) {
-        this.fetchData(page, sizePerPage, this.state.searchValue);
+        this.fetchData(page, sizePerPage, this.state.startDate, this.state.endDate);
     }
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-    
+    handleInputChange(name, value) {
+        let result = null
+        if(typeof(value) === "string")
+            result = value
+        else
+            result = value.toDate()    
         this.setState({
-          [name]: value
+          [name]: result
         });
     } 
     handleSearch() {
@@ -63,7 +66,7 @@ class Orders extends Component {
     }
     handleSizePerPageChange(sizePerPage) {
         // When changing the size per page always navigating to the first page
-        this.fetchData(1, sizePerPage, this.state.searchValue);
+        this.fetchData(1, sizePerPage, this.state.startDate, this.state.endDate);
     }
     showStatus(cell, row){
         if(cell != null) {
@@ -89,7 +92,7 @@ class Orders extends Component {
         })
     }
     showDetail(cell, row){
-        return <a href="#" onClick={this.setStateDetailData.bind(this,cell)}>detail</a>;
+        return <a href="#" onClick={this.setStateDetailData.bind(this,cell)}>Details</a>;
     }
     setStateDetailData(cell,e) {
         this.setState(state => ({
@@ -123,15 +126,19 @@ class Orders extends Component {
             <div className="content">
                 <div className="row">
                     <div className="col-md-4 col-lg-4">
-                    <Navbar.Form pullLeft>
-                            <FormGroup controlId="formStartDate">
-                                <FormControl name="startDate" value={this.state.startDate ? this.state.startDate : ""} onChange={(event => this.handleInputChange(event))} type="text" placeholder="Type start date to search" />
-                            </FormGroup>
-                            <FormGroup controlId="formEndDate">
-                                <FormControl name="endDate" value={this.state.endDate ? this.state.endDate : ""} onChange={(event => this.handleInputChange(event))} type="text" placeholder="Type end date to search" />
-                            </FormGroup>
-                            <button onClick={() => this.handleSearch()} className="btn btn-simple  "><span><i className="fa fa-search"></i></span></button>
-                    </Navbar.Form> 
+                    <Datetime
+                        value={this.state.startDate}
+                        dateFormat="YYYY-MM-DD"
+                        timeFormat="HH:mm:ss"
+                        onChange={(value)=>(this.handleInputChange("startDate",value))}
+                    />
+                    <Datetime
+                        value={this.state.endDate}
+                        dateFormat="YYYY-MM-DD"
+                        timeFormat="HH:mm:ss"
+                        onChange={(value)=>(this.handleInputChange("endDate",value))}
+                    />
+                    <button onClick={() => this.handleSearch()} className="btn btn-simple  "><span><i className="fa fa-search"></i></span></button>
                     </div>
                 </div>
 
@@ -183,7 +190,7 @@ class Orders extends Component {
             successMsg = <Alert bsStyle="success" onDismiss={() => this.setState({ successShow: false, successNotice: '' })}>{this.state.successNotice}</Alert>
         }
         if (this.props.deleteSuccess || this.props.updateSuccess || this.props.addSuccess) {
-            this.fetchData(1, 20, this.state.searchValue)
+            this.fetchData(1, 20, this.state.startDate, this.state.endDate)
         }
         return (
             <div className="container-fluid">
