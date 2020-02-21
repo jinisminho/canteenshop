@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 import static com.spring2020.coffeeshop.util.ConstantUtil.DELETE_SUCCESS;
 import static com.spring2020.coffeeshop.util.ConstantUtil.UPDATE_SUCCESS;
@@ -49,6 +50,11 @@ public class CategoryController {
             return categoryService.findCategoryByName(name, pageable);
         }
         return categoryService.findAllCategories(pageable);
+    }
+
+    @GetMapping("/getAll")
+    public List<CategoryDto> findAllCategory() {
+        return categoryService.findAll();
     }
 
 }
