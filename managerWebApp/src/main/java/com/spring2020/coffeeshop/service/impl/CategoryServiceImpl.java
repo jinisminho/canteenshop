@@ -12,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -68,6 +71,15 @@ public class CategoryServiceImpl implements CategoryService {
     public Page<CategoryDto> findCategoryByName(String name, Pageable pageable) {
         return categoryRepository.findByNameContaining(name, pageable)
                 .map(category -> mapper.convertValue(category, CategoryDto.class));
+    }
+
+    @Override
+    public List<CategoryDto> findAll() {
+        return categoryRepository
+                .findAll()
+                .stream()
+                .map(category -> mapper.convertValue(category, CategoryDto.class))
+                .collect(Collectors.toList());
     }
 
     private Category findCategoryByIdReturnCategory(int id) {
