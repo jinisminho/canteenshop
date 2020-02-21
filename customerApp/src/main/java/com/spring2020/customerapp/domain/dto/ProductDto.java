@@ -33,7 +33,8 @@ public class ProductDto {
     @Valid
     private CategoryDto category;
 
-    @Valid
-    private ProductImageDto productImage;
+    @NotNull(message = "{product.urlImg.notNull}")
+    @Length(min = 1, max = 500, message = "{product.urlImg.length}")
+    private String url_img;
 
 }

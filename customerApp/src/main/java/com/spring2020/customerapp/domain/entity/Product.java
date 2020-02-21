@@ -34,11 +34,7 @@ public class Product extends Audit {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(
-            fetch = FetchType.LAZY,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
-    )
-    @JoinColumn(name = "product_image_id")
-    private ProductImage productImage;
+    @Column(nullable = false, length = 500)
+    private String url_img;
 
 }
