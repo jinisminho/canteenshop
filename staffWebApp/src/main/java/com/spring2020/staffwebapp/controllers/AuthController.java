@@ -55,6 +55,7 @@ public class AuthController
         jwtResponseDto.setTokenPrefix(TOKEN_PREFIX);
         jwtResponseDto.setToken(token);
         jwtResponseDto.setStaffProfileDto(staffProfileDto);
+        jwtResponseDto.setExpiryDate(tokenProvider.getExpiryDateFromJwt(token));
         /*=======================*/
 
         return ResponseEntity.ok(jwtResponseDto);
