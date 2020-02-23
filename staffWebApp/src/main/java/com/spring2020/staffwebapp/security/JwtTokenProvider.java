@@ -25,7 +25,6 @@ public class JwtTokenProvider {
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
-
         return Jwts.builder()
                 .setSubject(Long.toString(userPrincipal.getId()))
                 .setIssuedAt(new Date())
@@ -43,6 +42,15 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
+    public Date getExpiryDateFromJwt(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getExpiration();
+    }
+
+
     public boolean validateToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
@@ -59,14 +67,6 @@ public class JwtTokenProvider {
             logger.error("JWT claims string is empty.");
         }
         return false;
-    }
-
-    public Date getExpiryDateFromJwt(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getExpiration();
     }
 
 }

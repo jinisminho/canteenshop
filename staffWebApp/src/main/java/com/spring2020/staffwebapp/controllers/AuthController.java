@@ -1,8 +1,7 @@
 package com.spring2020.staffwebapp.controllers;
 
-import com.spring2020.staffwebapp.domain.dto.JwtResponseDto;
-import com.spring2020.staffwebapp.domain.dto.StaffProfileDto;
 import com.spring2020.staffwebapp.security.JwtTokenProvider;
+import com.spring2020.staffwebapp.security.payload.JwtAuthenticationResponse;
 import com.spring2020.staffwebapp.security.payload.LoginRequest;
 import com.spring2020.staffwebapp.services.StaffProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-
-import static com.spring2020.staffwebapp.domain.constants.SecurityConstants.TOKEN_PREFIX;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -50,15 +47,12 @@ public class AuthController
         /*===============*/
 
         /*Create response object*/
-        StaffProfileDto staffProfileDto = staffProfileService.viewStaffProfile(loginRequest.getUsername());
-        JwtResponseDto jwtResponseDto = new JwtResponseDto();
-        jwtResponseDto.setTokenPrefix(TOKEN_PREFIX);
-        jwtResponseDto.setToken(token);
-        jwtResponseDto.setStaffProfileDto(staffProfileDto);
-        jwtResponseDto.setExpiryDate(tokenProvider.getExpiryDateFromJwt(token));
+        JwtAuthenticationResponse response = new JwtAuthenticationResponse(token,
+                tokenProvider.getUserIdFromJwt(token),
+                tokenProvider.getExpiryDateFromJwt(token).getTime(), "STAFF");
         /*=======================*/
 
-        return ResponseEntity.ok(jwtResponseDto);
+        return ResponseEntity.ok(response);
 
     }
 
