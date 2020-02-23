@@ -18,8 +18,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 
 @Service
-public class AppUserServiceImpl implements AppUserService
-{
+public class AppUserServiceImpl implements AppUserService {
 
     @Autowired
     private AppUserRepository appUserRepository;
@@ -31,9 +30,9 @@ public class AppUserServiceImpl implements AppUserService
     private ObjectMapper mapper;
 
     @Override
-    public AppUserDto findAppUserById(long id)
-    {
+    public AppUserDto findAppUserById(long id) {
         return mapper.convertValue(findAppUserByIdReturnAppUser(id), AppUserDto.class);
+
     }
 
     @Override
@@ -58,11 +57,9 @@ public class AppUserServiceImpl implements AppUserService
         if (userType == UserTypeEnum.STAFF) {
             Staff staff = staffRepository.findByAppUserId(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Staff not found"));
-            if (status)
-            {
+            if (status) {
                 staff.setTerminateDate(null);
-            } else
-            {
+            } else {
                 staff.setTerminateDate(LocalDate.now());
             }
             staffRepository.save(staff);
@@ -70,8 +67,7 @@ public class AppUserServiceImpl implements AppUserService
 
     }
 
-    private AppUser findAppUserByIdReturnAppUser(long id)
-    {
+    private AppUser findAppUserByIdReturnAppUser(long id) {
         return appUserRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id " + id + " not found"));
     }

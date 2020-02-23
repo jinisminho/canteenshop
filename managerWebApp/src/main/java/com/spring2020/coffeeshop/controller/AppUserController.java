@@ -33,10 +33,11 @@ public class AppUserController {
         return appUserService.findAllAppUsers(userType, pageable);
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/active/{id}")
     public String updateAppUserStatus(@PathVariable(value = "id") long id,
                                       @RequestParam(value = "userType") UserTypeEnum userType,
                                       @RequestParam(value = "isActive") boolean isActive) {
+        System.out.println("isActive");
         appUserService.updateAppUserStatus(userType, id, isActive);
         return UPDATE_SUCCESS;
     }
