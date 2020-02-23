@@ -96,20 +96,20 @@ class Nav extends Component {
             </div>
           </Collapse>
         </li>
-        <li className={this.isPathActive('/orders') || this.state.componentMenuOpen ? 'active' : null}>
+        <li className={this.isPathActive('/order') || this.state.componentMenuOpen ? 'active' : null}>
           <a onClick={() => this.setState({ orderMenuOpen: !this.state.orderMenuOpen })}
             data-toggle="collapse">
             <i className="pe-7s-users"></i>
             <p>
-              Order
+              Orders
             <b className="caret"></b>
             </p>
           </a>
           <Collapse in={this.state.orderMenuOpen}>
             <div>
               <ul className="nav">
-                <li className={this.isPathActive('Order/OrderList') ? 'active' : null}>
-                  <Link to="Order/OrderList">Order</Link>
+                <li className={this.isPathActive('/order/Order') ? 'active' : null}>
+                  <Link to="/order/Order">List of Orders</Link>
                 </li>
               </ul>
             </div>

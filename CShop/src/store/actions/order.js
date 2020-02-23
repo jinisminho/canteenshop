@@ -24,7 +24,7 @@ export const getOrdersStart = () => {
     }
 }
 
-function formatDate(flag) {
+function formatDateToday(flag) {
     if(flag) {
         var today = new Date(),
         month = '' + (today.getMonth() > 1? today.getMonth()-1 : 13-today.getMonth()),
@@ -46,19 +46,35 @@ function formatDate(flag) {
     return [year, month, day].join('-');
 }
 
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
 export const getOrders = (page, size,startDate, endDate) => {
     return dispatch => {
         dispatch(getOrdersStart())
         let url='/orders';
         
-        let date = formatDate();
+        let date = formatDateToday();
         let time = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
         let dateTime = date+' '+time;
-        let date2 = formatDate(true);
+        let date2 = formatDateToday(true);
         let dateTime2 = date2+' '+time;
 
         if(startDate && endDate){
-            url+='?page='+page+'&size='+size+'&startDate='+startDate+'&endDate='+endDate
+            let start = formatDate(startDate) + ' ' + startDate.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+            let end = formatDate(endDate) + ' ' + endDate.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+            url+='?page='+page+'&size='+size+'&startDate='+start+'&endDate='+end
         }else {
             url+='?page='+page+'&size='+size+'&startDate='+dateTime2+'&endDate='+dateTime
         }
