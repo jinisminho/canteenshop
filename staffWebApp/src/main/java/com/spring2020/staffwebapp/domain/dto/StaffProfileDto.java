@@ -32,4 +32,5 @@ public class StaffProfileDto
     private String socialId;
     private LocalDate hireDate;
     private Long staffId;
+    private String userType;
 }

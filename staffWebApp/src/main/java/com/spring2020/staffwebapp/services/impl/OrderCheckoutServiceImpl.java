@@ -11,6 +11,7 @@ import com.spring2020.staffwebapp.services.OrderCheckoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class OrderCheckoutServiceImpl implements OrderCheckoutService
     private static long STAFF_CUSTOMER_ID = 1;
 
     @Override
+    @Transactional
     public DbResponseDto checkoutOrderStaff(OrderCheckoutDto request)
     {
         /*Set return database not used*/
@@ -43,15 +45,21 @@ public class OrderCheckoutServiceImpl implements OrderCheckoutService
         dbResponseDto.setReason(DbMessageEnum.PENDING.getMessage());
         /*==============*/
 
-        /*Get Customer order*/
+        /*Create Customer order*/
         CustomerOrder customerOrder = createCustomerOrder(request);
         /*==============*/
 
-        /*Get Order details list*/
+        /*Return to FE if no order was created*/
+        if (customerOrder == null)
+        {
+            return dbResponseDto;
+        }
+
+        /*Create Order details list*/
         List<OrderDetail> orderDetailList = createOrderDetail(request, customerOrder);
         /*==============*/
 
-        if (customerOrder != null && !orderDetailList.isEmpty())
+        if (!orderDetailList.isEmpty())
         {
             try
             {
@@ -100,6 +108,9 @@ public class OrderCheckoutServiceImpl implements OrderCheckoutService
             customerOrder.setTotalPrice(totalPrice);
             customerOrder.setStaff(staff.get());
             customerOrder.setCustomer(customer.get());
+            OrderStatus orderStatus = new OrderStatus();
+            orderStatus.setId(request.getStatus().getId());
+            customerOrder.setStatus(orderStatus);
             /*==========================*/
             return customerOrder;
 
@@ -109,6 +120,9 @@ public class OrderCheckoutServiceImpl implements OrderCheckoutService
             customerOrder.setNote(request.getNote());
             customerOrder.setTotalPrice(totalPrice);
             customerOrder.setStaff(staff.get());
+            OrderStatus orderStatus = new OrderStatus();
+            orderStatus.setId(request.getStatus().getId());
+            customerOrder.setStatus(orderStatus);
             /*==========================*/
             return customerOrder;
         }

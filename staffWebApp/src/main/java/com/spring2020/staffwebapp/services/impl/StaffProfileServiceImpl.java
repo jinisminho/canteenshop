@@ -47,6 +47,7 @@ public class StaffProfileServiceImpl implements StaffProfileService
             staffProfileDto.setLastName(appUser.get().getLastName());
             staffProfileDto.setPhone(appUser.get().getPhone());
             staffProfileDto.setGender(appUser.get().getGender());
+            staffProfileDto.setUserType(appUser.get().getUserType());
         }
 
         return staffProfileDto;

@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class JwtResponseDto
 {
+    private String tokenPrefix;
     private String token;
-    StaffProfileDto staffProfileDto;
+    private StaffProfileDto staffProfileDto;
 }

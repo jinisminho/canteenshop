@@ -52,7 +52,8 @@ public class AuthController
         /*Create response object*/
         StaffProfileDto staffProfileDto = staffProfileService.viewStaffProfile(loginRequest.getUsername());
         JwtResponseDto jwtResponseDto = new JwtResponseDto();
-        jwtResponseDto.setToken(TOKEN_PREFIX + token);
+        jwtResponseDto.setTokenPrefix(TOKEN_PREFIX);
+        jwtResponseDto.setToken(token);
         jwtResponseDto.setStaffProfileDto(staffProfileDto);
         /*=======================*/
 
