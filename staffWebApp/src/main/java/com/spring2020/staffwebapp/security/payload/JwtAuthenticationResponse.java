@@ -1,7 +1,6 @@
 package com.spring2020.staffwebapp.security.payload;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,18 +11,21 @@ import static com.spring2020.staffwebapp.domain.constants.SecurityConstants.TOKE
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public class JwtAuthenticationResponse {
+public class JwtAuthenticationResponse
+{
 
     private String accessToken;
     private String tokenType = TOKEN_PREFIX;
     private Long userId;
+    private String username;
     private long expiryTime;
     private String role;
 
-    public JwtAuthenticationResponse(String accessToken, Long userId, long expiryTime, String role) {
+    public JwtAuthenticationResponse(String accessToken, Long userId, String username, long expiryTime, String role)
+    {
         this.accessToken = accessToken;
         this.userId = userId;
+        this.username = username;
         this.expiryTime = expiryTime;
         this.role = role;
     }
