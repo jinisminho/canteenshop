@@ -3,6 +3,7 @@ package com.spring2020.staffwebapp.services.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring2020.staffwebapp.domain.dto.DbResponseDto;
 import com.spring2020.staffwebapp.domain.dto.StaffProfileDto;
+import com.spring2020.staffwebapp.domain.dto.UpdateStaffDto;
 import com.spring2020.staffwebapp.domain.entity.AppUser;
 import com.spring2020.staffwebapp.domain.entity.Staff;
 import com.spring2020.staffwebapp.domain.enums.DbMessageEnum;
@@ -54,7 +55,7 @@ public class StaffProfileServiceImpl implements StaffProfileService
     }
 
     @Override
-    public DbResponseDto updateStaff(StaffProfileDto request)
+    public DbResponseDto updateStaff(UpdateStaffDto request)
     {
         /*Set return database not used*/
         DbResponseDto dbResponseDto = new DbResponseDto();
