@@ -100,6 +100,11 @@ public class OrderCheckoutServiceImpl implements OrderCheckoutService
             totalPrice += productDto.getPrice() * productDto.getQuantity();
         }
 
+//        Check note == null
+        if (request.getNote() == null){
+            request.setNote("");
+        }
+
         if (staff.isPresent() && customer.isPresent())
         {
             /*Set data for customer order*/

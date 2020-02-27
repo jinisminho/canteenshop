@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
-
 @Repository
 public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long>
 {
@@ -19,6 +17,12 @@ public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Lo
             countQuery = "SELECT count(*) FROM customer_order",
             nativeQuery = true)
     Page<CustomerOrder> findAllByCreateAtBetween(String startDate, String endDate, Pageable pageable);
+
+    @Query(value =
+            "SELECT * FROM customer_order WHERE status_id = ?3 AND (create_at between ?1 and ?2 +  interval 1 day)",
+            countQuery = "SELECT count(*) FROM customer_order",
+            nativeQuery = true)
+    Page<CustomerOrder> findAllByPeriodAndStatus(String startDate, String endDate, int status, Pageable pageable);
 
     Page<CustomerOrder> findAllByStatusId(int id, Pageable pageable);
 }

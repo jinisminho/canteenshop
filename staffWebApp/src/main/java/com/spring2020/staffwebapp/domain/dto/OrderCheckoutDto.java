@@ -19,7 +19,6 @@ public class OrderCheckoutDto
     @ApiModelProperty(required = true)
     private String location;
     @Length(max = 500, message = "{text.sizeNotOver500}")
-    @NotNull(message = "{field.notNull}")
     private String note;
     private OrderStatus status;
     private StaffCartDto cart;

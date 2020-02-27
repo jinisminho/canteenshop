@@ -151,4 +151,22 @@ public class OrderInfoServiceImpl implements OrderInfoService
         }
         return dbResponseDto;
     }
+
+    @Override
+    public Page<OrderDetailsDto> findOrderInPeriodByStatus(OrderStatusEnum orderStatusEnum, String from, String to, Pageable pageable)
+    {
+        try
+        {
+            LocalDate fromDate = LocalDate.parse(from);
+            LocalDate toDate = LocalDate.parse(to);
+            System.out.println(fromDate.atStartOfDay().toString());
+            DateTimeFormatter formatterString = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+            return customerOrderRepository.findAllByPeriodAndStatus(formatterString.format(fromDate.atStartOfDay())
+                    , formatterString.format(toDate.atTime(23, 59, 59)), orderStatusEnum.getId(), pageable)
+                    .map(customerOrder -> objectMapper.convertValue(customerOrder, OrderDetailsDto.class));
+        } catch (DateTimeParseException e)
+        {
+            throw new MissingInputException(e.getMessage());
+        }
+    }
 }
