@@ -13,13 +13,13 @@ public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Lo
     Page<CustomerOrder> findAllByStaffId(Long id, Pageable pageable);
 
     @Query(value =
-            "SELECT * FROM customer_order WHERE create_at between ?1 and ?2 +  interval 1 day",
+            "SELECT * FROM customer_order WHERE create_at between ?1 and ?2",
             countQuery = "SELECT count(*) FROM customer_order",
             nativeQuery = true)
     Page<CustomerOrder> findAllByCreateAtBetween(String startDate, String endDate, Pageable pageable);
 
     @Query(value =
-            "SELECT * FROM customer_order WHERE status_id = ?3 AND (create_at between ?1 and ?2 +  interval 1 day)",
+            "SELECT * FROM customer_order WHERE status_id = ?3 AND (create_at between ?1 and ?2)",
             countQuery = "SELECT count(*) FROM customer_order",
             nativeQuery = true)
     Page<CustomerOrder> findAllByPeriodAndStatus(String startDate, String endDate, int status, Pageable pageable);
