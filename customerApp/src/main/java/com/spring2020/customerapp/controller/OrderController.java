@@ -1,6 +1,7 @@
 package com.spring2020.customerapp.controller;
 
 import com.spring2020.customerapp.domain.dto.CreateOrderDto;
+import com.spring2020.customerapp.domain.dto.InputCreateOrderDto;
 import com.spring2020.customerapp.domain.dto.OrderDetailDto;
 import com.spring2020.customerapp.domain.dto.OrderDto;
 import com.spring2020.customerapp.service.OrderService;
@@ -19,7 +20,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create")
-    public OrderDto createOrder(@RequestBody @Valid CreateOrderDto orderDto) {
+    public OrderDto createOrder(@RequestBody @Valid InputCreateOrderDto orderDto) {
         return orderService.createOrder(orderDto);
     };
 

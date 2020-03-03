@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
     private ProductRepository productRepository;
 
     @Override
-    public OrderDto createOrder(CreateOrderDto orderDto) {
+    public OrderDto createOrder(InputCreateOrderDto orderDto) {
 
         if (orderDto == null) {
             throw new MissingInputException("missing input");
@@ -46,21 +46,23 @@ public class OrderServiceImpl implements OrderService {
             throw new CommonException("CustomerId is not Available");
         }
 
-        List<NewOrderDetailDto> listDetail = orderDto.getOrderDetails();
+        CreateOrderDto createOrderDto = OrderMapper.INSTANCE.dtoToDto(orderDto);
+        List<NewOrderDetailDto> listDetailFromDb = createOrderDto.getOrderDetails();
         double totalPrice = 0;
-        for (NewOrderDetailDto newOrderDetailDto : listDetail) {
+        for (NewOrderDetailDto newOrderDetailDto : listDetailFromDb) {
             ProductDto productDto = ProductMapper.INSTANCE.toDto(productRepository.findById(newOrderDetailDto.getProduct().getId()).get());
-            listDetail.get(listDetail.indexOf(newOrderDetailDto)).setProduct(productDto);
-            totalPrice += (productDto.getPrice() * listDetail.get(listDetail.indexOf(newOrderDetailDto)).getQuantity());
+            listDetailFromDb.get(listDetailFromDb.indexOf(newOrderDetailDto)).setProduct(productDto);
+            totalPrice += (productDto.getPrice() * listDetailFromDb.get(listDetailFromDb.indexOf(newOrderDetailDto)).getQuantity());
         }
-        orderDto.setOrderDetails(listDetail);
+        createOrderDto.setOrderDetails(listDetailFromDb);
 
-        if (orderDto.getTotalPrice() != totalPrice) {
-            throw new CommonException("Total Price is not correct");
-        }
-        orderDto.setTotalPrice(totalPrice);
+//        if (orderDto.getTotalPrice() != totalPrice) {
+//            throw new CommonException("Total Price is not correct");
+//        }
+//        orderDto.setTotalPrice(totalPrice);
+        createOrderDto.setTotalPrice(totalPrice);
 
-        CustomerOrder customerOrder = OrderMapper.INSTANCE.toEntity(orderDto);
+        CustomerOrder customerOrder = OrderMapper.INSTANCE.toEntity(createOrderDto);
 
         customerOrder.setStatus(new OrderStatus(1, OrderStatusEnum.Pending));
 

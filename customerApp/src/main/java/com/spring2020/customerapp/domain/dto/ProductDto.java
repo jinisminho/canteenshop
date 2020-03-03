@@ -1,9 +1,6 @@
 package com.spring2020.customerapp.domain.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
@@ -13,6 +10,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class ProductDto {
 
     private Long id;
