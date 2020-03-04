@@ -1,6 +1,7 @@
 package com.spring2020.customerapp.service.impl;
 
 import com.spring2020.customerapp.domain.dto.ProductDto;
+import com.spring2020.customerapp.exception.ResourceNotFoundException;
 import com.spring2020.customerapp.repository.ProductRepository;
 import com.spring2020.customerapp.service.ProductService;
 import com.spring2020.customerapp.mapper.ProductMapper;
@@ -28,5 +29,21 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByAvailable(true, pageable)
                 .map(product -> ProductMapper.INSTANCE.toDto(product));
 
+    }
+
+    @Override
+    public ProductDto findProductById(Long id) {
+        ProductDto result = new ProductDto();
+        if(id != null) {
+            result = ProductMapper.INSTANCE.toDto(productRepository.findByIdAndAvailable(id, true));
+        }
+
+        if (result != null) {
+            if(result.isAvailable()) {
+                return result;
+            }
+        }
+
+        throw new ResourceNotFoundException("Cant find product = id");
     }
 }
