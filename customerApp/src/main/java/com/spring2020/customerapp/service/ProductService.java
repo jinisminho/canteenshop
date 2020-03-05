@@ -8,4 +8,6 @@ public interface ProductService {
 
     Page<ProductDto> findProduct(Pageable pageable, String name);
 
+    ProductDto findProductById(Long id);
+
 }
