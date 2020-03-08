@@ -16,3 +16,7 @@ managerWebApp/
 customerApp/
 
 CShop/
+
+staffWebApp/src/main/java/com/spring2020/staffwebapp/.idea/
+
+staffWebApp/staff_webapp.iml
