@@ -1,7 +1,7 @@
 package com.spring2020.coffeeshop.controller;
 
 import com.spring2020.coffeeshop.domain.dto.AppUserDto;
-import com.spring2020.coffeeshop.domain.enums.UserType;
+import com.spring2020.coffeeshop.domain.enums.UserTypeEnum;
 import com.spring2020.coffeeshop.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,7 @@ public class AppUserController {
     }
 
     @GetMapping
-    public Page<AppUserDto> findAppUser(@RequestParam(value = "userType") UserType userType,
+    public Page<AppUserDto> findAppUser(@RequestParam(value = "userType") UserTypeEnum userType,
                                         @RequestParam(required = false, value = "name") String name,
                                         Pageable pageable) {
         if (name != null) {
@@ -33,10 +33,11 @@ public class AppUserController {
         return appUserService.findAllAppUsers(userType, pageable);
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/active/{id}")
     public String updateAppUserStatus(@PathVariable(value = "id") long id,
-                                      @RequestParam(value = "userType") UserType userType,
+                                      @RequestParam(value = "userType") UserTypeEnum userType,
                                       @RequestParam(value = "isActive") boolean isActive) {
+        System.out.println("isActive");
         appUserService.updateAppUserStatus(userType, id, isActive);
         return UPDATE_SUCCESS;
     }

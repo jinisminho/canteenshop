@@ -50,6 +50,7 @@ public class ProductController {
     public ResponseEntity<Object> findProductImageById(@PathVariable(value = "id") long id) {
         Resource fileSystemResource = productService.findProductImageById(id);
         return ResponseEntity.ok()
+                .header("Content-Disposition", "inline; filename=" + id)
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(fileSystemResource);
     }
