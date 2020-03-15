@@ -1,11 +1,13 @@
 package com.spring2020.customerapp.service.impl;
 
 import com.spring2020.customerapp.domain.dto.*;
+import com.spring2020.customerapp.domain.entity.AppUser;
 import com.spring2020.customerapp.domain.entity.Customer;
 import com.spring2020.customerapp.domain.enums.AppRoleEnum;
 import com.spring2020.customerapp.domain.enums.UserTypeEnum;
 import com.spring2020.customerapp.exception.CommonException;
 import com.spring2020.customerapp.exception.MissingInputException;
+import com.spring2020.customerapp.mapper.AppUserMapper;
 import com.spring2020.customerapp.mapper.CustomerMapper;
 import com.spring2020.customerapp.repository.AppUserRepository;
 import com.spring2020.customerapp.repository.CustomerRepository;
@@ -25,12 +27,12 @@ public class CustomerServiceImpl implements CustomerService {
     private BCryptPasswordEncoder encoder;
 
     @Override
-    public void updateCustomer(int id, UpdateAppUserDto dto) {
+    public void updateCustomer(Long appUserId, UpdateAppUserDto dto) {
 
-        Customer customer = customerRepository.findById(id).orElse(null);
+        Customer customer = customerRepository.findByAppUser_Id(appUserId).orElse(null);
 
         if (customer == null) {
-            throw new CommonException("Can't find Customer with id [" + id + "]");
+            throw new CommonException("Can't find Customer with id [" + appUserId + "]");
         }
         if (dto == null) {
             throw new MissingInputException("missing input");
@@ -69,5 +71,23 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDto getCustomer(int id) {
         return CustomerMapper.INSTANCE.toDto(customerRepository.findById(id).get());
+    }
+
+    @Override
+    public UserInfoDto getCustomerByAppUserId(Long id) {
+        UserInfoDto result = new UserInfoDto();
+        try {
+            result = AppUserMapper.INSTANCE.toDto(appUserRepository.findById(id).get());
+        } catch (Exception e) {
+            throw new CommonException("App User Id not Found");
+        }
+
+        try {
+            customerRepository.findByAppUser_Id(id).get();
+        } catch (Exception e) {
+            throw new CommonException("Customer with AppUserId " + id + " not Found");
+        }
+
+        return result;
     }
 }
