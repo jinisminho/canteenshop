@@ -1,10 +1,10 @@
 package com.spring2020.staffwebapp.controllers;
 
-import com.spring2020.staffwebapp.domain.dto.JwtResponseDto;
-import com.spring2020.staffwebapp.domain.dto.StaffProfileDto;
+import com.spring2020.staffwebapp.domain.entity.AppUser;
+import com.spring2020.staffwebapp.repositories.AppUserRepository;
 import com.spring2020.staffwebapp.security.JwtTokenProvider;
+import com.spring2020.staffwebapp.security.payload.JwtAuthenticationResponse;
 import com.spring2020.staffwebapp.security.payload.LoginRequest;
-import com.spring2020.staffwebapp.services.StaffProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-import static com.spring2020.staffwebapp.domain.constants.SecurityConstants.TOKEN_PREFIX;
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController
@@ -28,7 +26,7 @@ public class AuthController
     @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
-    StaffProfileService staffProfileService;
+    AppUserRepository appUserRepository;
 
     @Autowired
     JwtTokenProvider tokenProvider;
@@ -50,13 +48,16 @@ public class AuthController
         /*===============*/
 
         /*Create response object*/
-        StaffProfileDto staffProfileDto = staffProfileService.viewStaffProfile(loginRequest.getUsername());
-        JwtResponseDto jwtResponseDto = new JwtResponseDto();
-        jwtResponseDto.setToken(TOKEN_PREFIX + token);
-        jwtResponseDto.setStaffProfileDto(staffProfileDto);
+        Long appUserId = tokenProvider.getUserIdFromJwt(token);
+        String username = appUserRepository.findById(appUserId).orElse(new AppUser()).getUsername();
+        JwtAuthenticationResponse response = new JwtAuthenticationResponse(token,
+                appUserId,
+                username,
+                tokenProvider.getExpiryDateFromJwt(token).getTime(),
+                "STAFF");
         /*=======================*/
 
-        return ResponseEntity.ok(jwtResponseDto);
+        return ResponseEntity.ok(response);
 
     }
 

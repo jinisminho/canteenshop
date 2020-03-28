@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
@@ -40,6 +41,8 @@ public class OrderInfoServiceImpl implements OrderInfoService
 
     @Autowired
     ObjectMapper objectMapper;
+
+    public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     @Override
     public OrderDetailsDto viewOrderDetails(Long id)
@@ -81,8 +84,10 @@ public class OrderInfoServiceImpl implements OrderInfoService
         {
             LocalDate fromDate = LocalDate.parse(from);
             LocalDate toDate = LocalDate.parse(to);
-            return customerOrderRepository.findAllByCreateAtIsBetween(fromDate.atStartOfDay()
-                    , toDate.atTime(23, 59, 59), pageable)
+            System.out.println(fromDate.atStartOfDay().toString());
+            DateTimeFormatter formatterString = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+            return customerOrderRepository.findAllByCreateAtBetween(formatterString.format(fromDate.atStartOfDay())
+                    , formatterString.format(toDate.atTime(23, 59, 59)), pageable)
                     .map(customerOrder -> objectMapper.convertValue(customerOrder, OrderDetailsDto.class));
         } catch (DateTimeParseException e)
         {
@@ -145,5 +150,23 @@ public class OrderInfoServiceImpl implements OrderInfoService
             dbResponseDto.setReason(InputValidateMessageEnum.ORDER_NOT_FOUND.getMessage());
         }
         return dbResponseDto;
+    }
+
+    @Override
+    public Page<OrderDetailsDto> findOrderInPeriodByStatus(OrderStatusEnum orderStatusEnum, String from, String to, Pageable pageable)
+    {
+        try
+        {
+            LocalDate fromDate = LocalDate.parse(from);
+            LocalDate toDate = LocalDate.parse(to);
+            System.out.println(fromDate.atStartOfDay().toString());
+            DateTimeFormatter formatterString = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
+            return customerOrderRepository.findAllByPeriodAndStatus(formatterString.format(fromDate.atStartOfDay())
+                    , formatterString.format(toDate.atTime(23, 59, 59)), orderStatusEnum.getId(), pageable)
+                    .map(customerOrder -> objectMapper.convertValue(customerOrder, OrderDetailsDto.class));
+        } catch (DateTimeParseException e)
+        {
+            throw new MissingInputException(e.getMessage());
+        }
     }
 }

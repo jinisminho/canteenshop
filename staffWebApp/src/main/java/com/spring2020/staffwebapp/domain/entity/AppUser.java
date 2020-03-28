@@ -1,5 +1,6 @@
 package com.spring2020.staffwebapp.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.spring2020.staffwebapp.domain.enums.GenderEnum;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "App_User")
+@JsonIgnoreProperties(
+        value = {"password"},
+        allowGetters = true
+)
 public class AppUser extends Audit
 {
 

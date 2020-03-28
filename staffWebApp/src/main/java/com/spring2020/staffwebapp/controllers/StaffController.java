@@ -3,6 +3,7 @@ package com.spring2020.staffwebapp.controllers;
 import com.spring2020.staffwebapp.domain.dto.DbResponseDto;
 import com.spring2020.staffwebapp.domain.dto.OrderCheckoutDto;
 import com.spring2020.staffwebapp.domain.dto.StaffProfileDto;
+import com.spring2020.staffwebapp.domain.dto.UpdateStaffDto;
 import com.spring2020.staffwebapp.services.OrderCheckoutService;
 import com.spring2020.staffwebapp.services.StaffProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class StaffController
     }
 
     @PostMapping("/profile")
-    public DbResponseDto updateStaffProfile(@RequestBody @Valid StaffProfileDto request)
+    public DbResponseDto updateStaffProfile(@RequestBody @Valid UpdateStaffDto request)
     {
         return staffProfileService.updateStaff(request);
     }

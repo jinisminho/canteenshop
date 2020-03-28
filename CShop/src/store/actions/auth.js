@@ -1,141 +1,139 @@
 import * as actionTypes from './actionTypes'
 import axios from '../../axios-manager'
-export const authStart = ()=>{
-    return{
+export const authStart = () => {
+    return {
         type: actionTypes.AUTH_START
     };
 }
 
-export const authSuccess = (token, userId)=>{
-    return{
+export const authSuccess = (token, userId) => {
+    return {
         type: actionTypes.AUTH_SUCCESS,
         idToken: token,
         userId: userId
     };
 }
 
-export const authFail =(error) =>{
-    return{
+export const authFail = (error) => {
+    return {
         type: actionTypes.AUTH_FAILED,
         error: error
     }
 }
 
-export const logout =()=>{
+export const logout = () => {
+    console.log("AAAAAAAAA LOGGED OUT")
     localStorage.removeItem('accessToken')
     localStorage.removeItem('expiryDate')
     localStorage.removeItem('userId')
 
-    return{
+    return {
         type: actionTypes.AUTH_LOGOUT
     }
 }
 
-export const checkAuthTimeOut = (expirationTime) =>{
-    return dispatch =>{
-        setTimeout(()=>{
-            console.log("time: "+expirationTime)
+export const checkAuthTimeOut = (expirationTime) => {
+    return dispatch => {
+        setTimeout(() => {
             dispatch(logout())
-        },expirationTime*1000)
+        }, expirationTime)
     }
 }
 
-export const auth = (username, password) =>{
+export const auth = (username, password) => {
     return dispatch => {
         dispatch(authStart());
-        const authData ={
-            username:username,
-            password:password,
-            }
-        let url='/auth/login'
+        const authData = {
+            username: username,
+            password: password,
+        }
+        let url = '/auth/login'
         // if(!isSignup){
         ///       url= 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDlIksbOmIbctM2LrIvzxQJznoKcyIUEJI'
         //     
         // }
-        axios.post(url,authData)
-        .then(response =>{
-            const expiryDate= new Date(new Date().getTime() + response.data.expiryDate)
-            localStorage.setItem('accessToken',response.data.accessToken)
-            localStorage.setItem('expiryDate', expiryDate)
-            localStorage.setItem('userId', response.data.userId)
-            dispatch(authSuccess(response.data.accessToken, response.data.userId))
-            dispatch(checkAuthTimeOut(response.data.expiryDate))
-        })
-        .catch(err =>{
-            dispatch(authFail(err.response.data.error))
-        })
+        axios.post(url, authData)
+            .then(response => {
+                const expiryDate = new Date(new Date().getTime() + response.data.expiryDate)
+                localStorage.setItem('accessToken', response.data.accessToken)
+                localStorage.setItem('expiryDate', expiryDate)
+                localStorage.setItem('userId', response.data.userId)
+                dispatch(authSuccess(response.data.accessToken, response.data.userId))
+                dispatch(checkAuthTimeOut(response.data.expiryDate))
+            })
+            .catch(err => {
+                dispatch(authFail(err.response.data.error))
+            })
     }
 }
-export const setAuthRedirectPath = (path) =>{
+export const setAuthRedirectPath = (path) => {
     return {
         type: actionTypes.SET_AUTH_REDIRECT_PATH,
         path: path
     }
 }
 
-export const authCheckState = ()=>{
-    console.log('aaa')
-
-    return dispatch=>{
-        const token =localStorage.getItem('accessToken')
-        if(!token){
+export const authCheckState = () => {
+    return dispatch => {
+        const token = localStorage.getItem('accessToken')
+        if (!token) {
             dispatch(logout())
-        }else{
+        } else {
             const expiryDate = new Date(localStorage.getItem('expiryDate'))
 
-            if(expiryDate <= new Date()){
+            if (expiryDate <= new Date()) {
                 dispatch(logout())
-            }else{
+            } else {
                 const userId = localStorage.getItem('userId')
                 dispatch(authSuccess(token, userId))
-                dispatch(checkAuthTimeOut((expiryDate.getTime()+new Date().getTime()/1000)))
+                dispatch(checkAuthTimeOut((expiryDate.getTime() - (new Date().getTime()))))
             }
         }
     }
 }
 
-export const changePasswordStart = ()=>{
-    return{
+export const changePasswordStart = () => {
+    return {
         type: actionTypes.CHANGE_PASSWORD_FAILED
     };
 }
-export const changePasswordFailed =(error) =>{
-    return{
+export const changePasswordFailed = (error) => {
+    return {
         type: actionTypes.CHANGE_PASSWORD_FAILED,
         error: error
     }
 }
-export const changePasswordSuccess = (token, userId)=>{
-    return{
+export const changePasswordSuccess = (token, userId) => {
+    return {
         type: actionTypes.CHANGE_PASSWORD_SUCCESS,
         idToken: token,
         userId: userId
     };
 }
-export const changePassword = (id, newPass) =>{
+export const changePassword = (id, newPass) => {
     return dispatch => {
         dispatch(changePasswordStart());
-        const changeData ={
-            idToken:id,
-            password:newPass,
-            returnSecureToken :true
+        const changeData = {
+            idToken: id,
+            password: newPass,
+            returnSecureToken: true
         }
-        let url='https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDlIksbOmIbctM2LrIvzxQJznoKcyIUEJI'
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDlIksbOmIbctM2LrIvzxQJznoKcyIUEJI'
         // if(!isSignup){
         ///       url= 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDlIksbOmIbctM2LrIvzxQJznoKcyIUEJI'
         //     
         // }
-        axios.post(url,changeData)
-        .then(response =>{
-            const expiryDate= new Date(new Date().getTime() + response.data.expiryDate*1000)
-            localStorage.setItem('accessToken',response.data.accessToken)
-            localStorage.setItem('expiryDate', expiryDate)
-            localStorage.setItem('userId', response.data.userId)
-            dispatch(changePasswordSuccess(response.data.accessToken, response.data.userId))
-            dispatch(checkAuthTimeOut(response.data.expiresIn))
-        })
-        .catch(err =>{
-            dispatch(changePasswordFailed(err.response.data.error))
-        })
+        axios.post(url, changeData)
+            .then(response => {
+                const expiryDate = new Date(response.data.expiryDate)
+                localStorage.setItem('accessToken', response.data.accessToken)
+                localStorage.setItem('expiryDate', expiryDate)
+                localStorage.setItem('userId', response.data.userId)
+                dispatch(changePasswordSuccess(response.data.accessToken, response.data.userId))
+                dispatch(checkAuthTimeOut(response.data.expiryDate - (new Date().getTime())))
+            })
+            .catch(err => {
+                dispatch(changePasswordFailed(err.response.data.error))
+            })
     }
 }

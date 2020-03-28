@@ -1,6 +1,8 @@
 package com.spring2020.staffwebapp.domain.dto;
 
-import com.spring2020.staffwebapp.domain.entity.*;
+import com.spring2020.staffwebapp.domain.entity.Customer;
+import com.spring2020.staffwebapp.domain.entity.OrderDetail;
+import com.spring2020.staffwebapp.domain.entity.OrderStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +20,6 @@ public class OrderDetailsDto extends AuditDto
     private double totalPrice;
     private List<OrderDetail> orderDetails;
     private OrderStatus status;
-    private Staff staff;
+    private StaffProfileDto staff;
     private Customer customer;
 }

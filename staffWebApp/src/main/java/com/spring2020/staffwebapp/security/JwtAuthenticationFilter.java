@@ -16,7 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.spring2020.staffwebapp.domain.constants.SecurityConstants.TOKEN_PREFIX;
+
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final String AUTH_HEADER = "Authorization";
 
     @Autowired
     private JwtTokenProvider tokenProvider;
@@ -51,8 +55,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+        String bearerToken = request.getHeader(AUTH_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX + " ")) {
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;
