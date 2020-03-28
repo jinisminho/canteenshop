@@ -7,7 +7,7 @@ import Spinner from '../../components/Spinner/Spinner'
 import DeleteButton from '../../components/Button/DeleteButton'
 import UpdateButton from '../../components/Button/UpdateButton'
 import SweetAlert from 'sweetalert-react';
-import { Navbar,FormGroup, FormControl, Alert } from 'react-bootstrap'
+import { Navbar, FormGroup, FormControl, Alert } from 'react-bootstrap'
 import CategoryModal from '../Components/Modal/CategoryModal'
 
 class Categories extends Component {
@@ -54,7 +54,7 @@ class Categories extends Component {
 
 
     }
-    activeFormatter(cell, row) {        
+    activeFormatter(cell, row) {
         return (
             <div>
                 <UpdateButton clicked={() => this.setState({
@@ -84,7 +84,7 @@ class Categories extends Component {
     getInitialValues = () => {
         return {
             name: this.state.updateData ? this.state.updateData.name : '',
-            id:this.state.updateData ? this.state.updateData.id : ''
+            id: this.state.updateData ? this.state.updateData.id : ''
         };
     }
     inputChangedHandler = (event) => {
@@ -128,12 +128,12 @@ class Categories extends Component {
             <div className="content">
                 <div className="row">
                     <div className="col-md-4 col-lg-4">
-                    <Navbar.Form pullLeft>
+                        <Navbar.Form pullLeft>
                             <FormGroup>
-                                <FormControl   value={this.state.searchValue ? this.state.searchValue : ""} onChange={(event => this.inputChangedHandler(event))} type="text" placeholder="Type to search" />
+                                <FormControl value={this.state.searchValue ? this.state.searchValue : ""} onChange={(event => this.inputChangedHandler(event))} type="text" placeholder="Type to search" />
                                 <button onClick={() => this.handleSearch()} className="btn btn-simple  "><span><i className="fa fa-search"></i></span></button>
                             </FormGroup>
-                            </Navbar.Form>                    </div>
+                        </Navbar.Form>                    </div>
                     <div className="col-md-4 col-lg-4 pull-right">
                         <button onClick={() => this.setState({ addFormShow: true })}
                             type="button" className="btn btn-info btn-fill btn-wd pull-right" >

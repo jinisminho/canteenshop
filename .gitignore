@@ -10,3 +10,13 @@ staffWebApp/target/test-classes/com/spring2020/staffwebapp/coffee/shop/LinhTinh.
 staffWebApp/target/
 
 staffWebApp/src/test/java/com/spring2020/staffwebapp/coffee/shop/LinhTinh.java
+
+managerWebApp/
+
+customerApp/
+
+CShop/
+
+staffWebApp/src/main/java/com/spring2020/staffwebapp/.idea/
+
+staffWebApp/staff_webapp.iml

@@ -9,7 +9,10 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/orders")
@@ -42,6 +45,16 @@ public class OrderController
     {
         return orderInfoService.findOrdersInPeriod(from, to, pageable);
     }
+    @GetMapping("/searchInPeriodByStatus")
+    @ApiOperation(value = "Find order in a period by order status")
+    public Page<OrderDetailsDto> findOrderInPeriodByStatus(
+            @RequestParam(value = "Status") @ApiParam(example = "Pending", required = true, value = "Status") OrderStatusEnum orderStatusEnum,
+            @RequestParam(value = "From") @ApiParam(example = "2020-01-01", required = true, value = "Format YYYY-MM-dd") String from
+            , @RequestParam(value = "To") @ApiParam(example = "2020-01-01", required = true, value = "Format YYYY-MM-dd") String to
+            , Pageable pageable)
+    {
+        return orderInfoService.findOrderInPeriodByStatus(orderStatusEnum, from, to, pageable);
+    }
 
     @GetMapping("/searchByStatus")
     @ApiOperation(value = "Get a list of order by status")
@@ -52,7 +65,7 @@ public class OrderController
         return orderInfoService.findOrdersByStatus(orderStatusEnum, pageable);
     }
 
-    @PostMapping("/editStatus")
+    @GetMapping("/editStatus")
     @ApiOperation(value = "Change an order status")
     public DbResponseDto editOrderStatus(
             @RequestParam(value = "Id") @ApiParam(required = true, value = "Order id", example = "1") long id

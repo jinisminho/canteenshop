@@ -25,5 +25,5 @@ public class ProductDto
     private String description;
     private Category category;
     private boolean isAvailable;
-    private ProductImage productImage;
+    private String url_img;
 }

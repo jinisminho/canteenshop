@@ -18,4 +18,6 @@ public interface OrderInfoService
     Page<OrderDetailsDto> findOrdersByStatus(OrderStatusEnum orderStatusEnum, Pageable pageable);
 
     DbResponseDto editOrderStatus(Long id, OrderStatusEnum orderStatusEnum);
+
+    Page<OrderDetailsDto> findOrderInPeriodByStatus(OrderStatusEnum orderStatusEnum, String from, String to, Pageable pageable);
 }
