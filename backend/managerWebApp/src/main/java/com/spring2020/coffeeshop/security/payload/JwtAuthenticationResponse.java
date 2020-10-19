@@ -21,11 +21,13 @@ public class JwtAuthenticationResponse {
     private Long userId;
     private Date expiryDate;
     private String role;
+    private String username;
 
-    public JwtAuthenticationResponse(String accessToken, Long userId, Date expiryTime, String role) {
+    public JwtAuthenticationResponse(String accessToken, Long userId, Date expiryTime, String role, String username) {
         this.accessToken = accessToken;
         this.userId = userId;
         this.expiryDate = expiryTime;
         this.role = role;
+        this.username = username;
     }
 }

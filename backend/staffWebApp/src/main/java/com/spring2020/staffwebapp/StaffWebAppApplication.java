@@ -26,7 +26,7 @@ public class StaffWebAppApplication
             @Override
             public void addCorsMappings(CorsRegistry registry)
             {
-                String frontendPort = "http://localhost:3000";
+                String frontendPort = "http://localhost:8080";
                 registry.addMapping("/**").allowedOrigins(frontendPort);
             }
         };
