@@ -28,8 +28,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 @Service
-public class OrderInfoServiceImpl implements OrderInfoService
-{
+public class OrderInfoServiceImpl implements OrderInfoService {
     @Autowired
     CustomerOrderRepository customerOrderRepository;
     @Autowired
@@ -45,16 +44,13 @@ public class OrderInfoServiceImpl implements OrderInfoService
     public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     @Override
-    public OrderDetailsDto viewOrderDetails(Long id)
-    {
+    public OrderDetailsDto viewOrderDetails(Long id) {
         OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
         Optional<CustomerOrder> customerOrderOptional = customerOrderRepository.findById(id);
-        if (customerOrderOptional.isPresent())
-        {
+        if (customerOrderOptional.isPresent()) {
             Optional<OrderDetailsDto> orderDetailsDtoOptional = customerOrderOptional
                     .map(orderDetail -> objectMapper.convertValue(orderDetail, OrderDetailsDto.class));
-            if (orderDetailsDtoOptional.isPresent())
-            {
+            if (orderDetailsDtoOptional.isPresent()) {
                 orderDetailsDto = orderDetailsDtoOptional.get();
             }
         }
@@ -62,14 +58,11 @@ public class OrderInfoServiceImpl implements OrderInfoService
     }
 
     @Override
-    public Page<OrderDetailsDto> findOrdersByStaff(String username, Pageable pageable)
-    {
+    public Page<OrderDetailsDto> findOrdersByStaff(String username, Pageable pageable) {
         Optional<AppUser> appUserOptional = appUserRepository.findAppUserByUsername(username);
-        if (appUserOptional.isPresent())
-        {
+        if (appUserOptional.isPresent()) {
             Optional<Staff> staffOptional = staffRepository.findStaffByAppUserId(appUserOptional.get().getId());
-            if (staffOptional.isPresent())
-            {
+            if (staffOptional.isPresent()) {
                 return customerOrderRepository.findAllByStaffId(staffOptional.get().getId(), pageable)
                         .map(customerOrder -> objectMapper.convertValue(customerOrder, OrderDetailsDto.class));
             }
@@ -78,94 +71,82 @@ public class OrderInfoServiceImpl implements OrderInfoService
     }
 
     @Override
-    public Page<OrderDetailsDto> findOrdersInPeriod(String from, String to, Pageable pageable)
-    {
-        try
-        {
+    public Page<OrderDetailsDto> findOrdersInPeriod(String from, String to, Pageable pageable) {
+        try {
             LocalDate fromDate = LocalDate.parse(from);
             LocalDate toDate = LocalDate.parse(to);
-            System.out.println(fromDate.atStartOfDay().toString());
             DateTimeFormatter formatterString = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-            return customerOrderRepository.findAllByCreateAtBetween(formatterString.format(fromDate.atStartOfDay())
-                    , formatterString.format(toDate.atTime(23, 59, 59)), pageable)
+            return customerOrderRepository
+                    .findAllByCreateAtBetween(formatterString.format(fromDate.atStartOfDay()),
+                            formatterString.format(toDate.atTime(23, 59, 59)), pageable)
                     .map(customerOrder -> objectMapper.convertValue(customerOrder, OrderDetailsDto.class));
-        } catch (DateTimeParseException e)
-        {
+        } catch (DateTimeParseException e) {
             throw new MissingInputException(e.getMessage());
         }
     }
 
     @Override
-    public Page<OrderDetailsDto> findOrdersByStatus(OrderStatusEnum orderStatusEnum, Pageable pageable)
-    {
+    public Page<OrderDetailsDto> findOrdersByStatus(OrderStatusEnum orderStatusEnum, Pageable pageable) {
         return customerOrderRepository.findAllByStatusId(orderStatusEnum.getId(), pageable)
                 .map(customerOrder -> objectMapper.convertValue(customerOrder, OrderDetailsDto.class));
     }
 
     @Override
-    public DbResponseDto editOrderStatus(Long id, OrderStatusEnum orderStatusEnum)
-    {
-        /*Set return database not used*/
+    public DbResponseDto editOrderStatus(Long id, OrderStatusEnum orderStatusEnum) {
+        /* Set return database not used */
         DbResponseDto dbResponseDto = new DbResponseDto();
         dbResponseDto.setDbStatus(DbStatusEnum.PENDING.getCode());
         dbResponseDto.setDbMessage(DbMessageEnum.PENDING.getMessage());
         dbResponseDto.setReason(DbMessageEnum.PENDING.getMessage());
-        /*==============*/
+        /* ============== */
 
         Optional<CustomerOrder> customerOrderOptional = customerOrderRepository.findById(id);
-        if (customerOrderOptional.isPresent())
-        {
+        if (customerOrderOptional.isPresent()) {
             Optional<OrderStatus> orderStatusOptional = orderStatusRepository.findById(orderStatusEnum.getId());
-            if (orderStatusOptional.isPresent())
-            {
+            if (orderStatusOptional.isPresent()) {
                 CustomerOrder customerOrder = customerOrderOptional.get();
-                /*Check if order is canceled or completed.
-                 * NOT allowed to change canceled or completed orders*/
+                /*
+                 * Check if order is canceled or completed. NOT allowed to change canceled or
+                 * completed orders
+                 */
                 if (!customerOrder.getStatus().getId().equals(OrderStatusEnum.Completed.getId())
-                        && !customerOrder.getStatus().getId().equals(OrderStatusEnum.Canceled.getId()))
-                {
+                        && !customerOrder.getStatus().getId().equals(OrderStatusEnum.Canceled.getId())) {
                     customerOrder.setStatus(orderStatusOptional.get());
-                    try
-                    {
+                    try {
                         customerOrderRepository.save(customerOrder);
                         dbResponseDto.setDbStatus(DbStatusEnum.SUCCESS.getCode());
                         dbResponseDto.setDbMessage(DbMessageEnum.SUCCESS.getMessage());
                         dbResponseDto.setReason(DbMessageEnum.SUCCESS.getMessage());
-                    } catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         dbResponseDto.setDbStatus(DbStatusEnum.FAILED.getCode());
                         dbResponseDto.setDbMessage(DbMessageEnum.FAILED.getMessage());
                         dbResponseDto.setReason(e.getMessage());
                     }
-                } else
-                {
+                } else {
                     dbResponseDto.setReason(InputValidateMessageEnum.CHANGE_ORDER_STT_COMPLETED_CANCELED.getMessage());
                 }
-            } else
-            {
+            } else {
                 dbResponseDto.setReason(InputValidateMessageEnum.ORDER_STATUS_NOT_FOUND.getMessage());
             }
-        } else
-        {
+        } else {
             dbResponseDto.setReason(InputValidateMessageEnum.ORDER_NOT_FOUND.getMessage());
         }
         return dbResponseDto;
     }
 
     @Override
-    public Page<OrderDetailsDto> findOrderInPeriodByStatus(OrderStatusEnum orderStatusEnum, String from, String to, Pageable pageable)
-    {
-        try
-        {
+    public Page<OrderDetailsDto> findOrderInPeriodByStatus(OrderStatusEnum orderStatusEnum, String from, String to,
+            Pageable pageable) {
+        try {
             LocalDate fromDate = LocalDate.parse(from);
             LocalDate toDate = LocalDate.parse(to);
             System.out.println(fromDate.atStartOfDay().toString());
             DateTimeFormatter formatterString = DateTimeFormatter.ofPattern(DATE_TIME_PATTERN);
-            return customerOrderRepository.findAllByPeriodAndStatus(formatterString.format(fromDate.atStartOfDay())
-                    , formatterString.format(toDate.atTime(23, 59, 59)), orderStatusEnum.getId(), pageable)
+            return customerOrderRepository
+                    .findAllByPeriodAndStatus(formatterString.format(fromDate.atStartOfDay()),
+                            formatterString.format(toDate.atTime(23, 59, 59)), orderStatusEnum.getId(), pageable)
                     .map(customerOrder -> objectMapper.convertValue(customerOrder, OrderDetailsDto.class));
-        } catch (DateTimeParseException e)
-        {
+        } catch (DateTimeParseException e) {
             throw new MissingInputException(e.getMessage());
         }
     }
