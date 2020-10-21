@@ -54,7 +54,8 @@ export {
 export {
     getOrdersStaff,
     getCancelReasonStaff,
-    cancelOrder
+    cancelOrder,
+    changeOrderStatusStaff
 } from './orderStaff'
 
 export{
