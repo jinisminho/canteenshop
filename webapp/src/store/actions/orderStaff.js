@@ -121,3 +121,37 @@ export const cancelOrder = (reason, cancelId) => {
             });
     }
 }
+
+export const changeOrderStatusStaffSuccess = () => {
+    return {
+        type: actionTypes.CHANGE_ORDERSTATUS_SUCCESS,
+    }
+}
+
+export const changeOrderStatusStaffFail = (error) => {
+    return {
+        type: actionTypes.CHANGE_ORDERSTATUS_FAILED,
+        error: error
+    }
+}
+
+export const changeOrderStatusStaffStart = () => {
+    return {
+        type: actionTypes.CHANGE_ORDERSTATUS_START
+    }
+}
+
+export const changeOrderStatusStaff = (orderId, newStatus) => {
+    return dispatch => {
+        dispatch(changeOrderStatusStaffStart())
+        
+        let url='/orders/editStatus?Id='+orderId+'&Status='+newStatus
+        return axios.get(url, { headers: {"Authorization" : `Bearer ${localStorage.getItem("accessToken")}`} })
+            .then(response => {
+                dispatch(changeOrderStatusStaffSuccess())
+            })
+            .catch(error => {
+                dispatch(changeOrderStatusStaffFail(error))
+            });
+    }
+}

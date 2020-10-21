@@ -20,3 +20,11 @@ backend/managerWebApp/mvnw
 backend/managerWebApp/mvnw.cmd
 
 backend/staffWebApp/staff_webapp.iml
+
+backend/staffWebApp/.classpath
+
+backend/staffWebApp/.factorypath
+
+backend/staffWebApp/.project
+
+backend/staffWebApp/.settings/

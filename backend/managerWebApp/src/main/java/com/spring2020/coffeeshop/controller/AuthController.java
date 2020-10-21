@@ -23,32 +23,27 @@ import java.util.List;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+        @Autowired
+        private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private AppUserService appUserService;
+        @Autowired
+        private AppUserService appUserService;
 
-    @Autowired
-    private JwtTokenProvider tokenProvider;
+        @Autowired
+        private JwtTokenProvider tokenProvider;
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
-        String role = appUserService.findAppUserByUsername(loginRequest.getUsername()).getAppRole().getName().toString();
-        JwtAuthenticationResponse response = new JwtAuthenticationResponse(jwt,
-                tokenProvider.getUserIdFromJwt(jwt),
-                tokenProvider.getExpiryDateFromJwt(jwt), role);
-        return ResponseEntity.ok(response);
-    }
-
+        @PostMapping("/login")
+        public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+                String username = loginRequest.getUsername();
+                Authentication authentication = authenticationManager.authenticate(
+                                new UsernamePasswordAuthenticationToken(username, loginRequest.getPassword()));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwt = tokenProvider.generateToken(authentication);
+                String role = appUserService.findAppUserByUsername(username).getAppRole().getName().toString();
+                JwtAuthenticationResponse response = new JwtAuthenticationResponse(jwt,
+                                tokenProvider.getUserIdFromJwt(jwt), tokenProvider.getExpiryDateFromJwt(jwt), role,
+                                username);
+                return ResponseEntity.ok(response);
+        }
 
 }

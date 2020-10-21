@@ -11,6 +11,7 @@ import "react-datetime/css/react-datetime.css";
 import ReasonStaffModal from '../Components/Modal/ReasonStaffModal';
 import DeleteButton from '../../components/Button/DeleteButton'
 import CancelModal from '../Components/Modal/CancelModal';
+import SweetAlert from 'sweetalert-react';
 
 
 class Orders extends Component {
@@ -27,7 +28,9 @@ class Orders extends Component {
             cancelReason: false,
             cancelId: null,
             newCancelReason: null,
-            showCancelForm: false
+            showCancelForm: false,
+            showConfirmChangeStatus: false,
+            newStatus: null,
         }
         this.fetchData = this.fetchData.bind(this);
         this.handlePageChange = this.handlePageChange.bind(this);
@@ -130,13 +133,44 @@ class Orders extends Component {
     }
 
     activeFormatter(cell, row) {        
+
+        if (cell.status == "Pending") {
+            return (
+                <div>
+                    <button className="btn btn-fill btn-info" onClick={() => this.setState({
+                        showConfirmChangeStatus: true,
+                        orderId: row.id,
+                        newStatus: 'Confirmed'
+                    })} >Confirm</button>
+                    <button className="btn btn-fill btn-danger" onClick={() => this.setState({
+                        showCancelForm: true,
+                        cancelId: row.id
+                    })} >Cancel</button>
+                </div>              
+            )
+        }
+        if (cell.status == "Confirmed") {
+            return (
+                <div>
+                    <button className="btn btn-fill btn-info" onClick={() => this.setState({
+                        showConfirmChangeStatus: true,
+                        orderId: row.id,
+                        newStatus: 'Delivering'
+                    })} >Delivery</button>
+                    <button className="btn btn-fill btn-danger" onClick={() => this.setState({
+                        showCancelForm: true,
+                        cancelId: row.id
+                    })} >Cancel</button>
+                </div>
+            )
+        }
         if (cell.status != "Canceled" && cell.status != "Completed" ) {
             return (
                 <div>
-                    <DeleteButton clicked={() => this.setState({
+                    <button className="btn btn-fill btn-danger" onClick={() => this.setState({
                         showCancelForm: true,
                         cancelId: row.id
-                    })} />
+                    })} >Cancel</button>
                 </div>
             )
         }
@@ -157,6 +191,15 @@ class Orders extends Component {
             cancelId: null,
         })
     }
+    handleChangeOrderStatus = () => {
+        this.setState({showConfirmChangeStatus: false})
+        const doChangeThenReloadTable = async () => { 
+            await this.props.onChangeOrderStatus(this.state.orderId, this.state.newStatus)
+            await this.fetchData(this.props.page, this.props.sizePerPage, this.props.startDate, this.props.endDate, this.props.orderStatus)
+            return
+        }
+        return doChangeThenReloadTable()
+    } 
 
     render() {
         const options = {
@@ -219,6 +262,14 @@ class Orders extends Component {
                             title="Cancel Order"
                             submitCancel={(reason) => this.handleCancelSubmit(reason, this.state.cancelId)} 
                         />
+
+                        <SweetAlert
+                            title="Are you sure?"
+                            show={this.state.showConfirmChangeStatus}
+                            text="You will not be able to undo this action"
+                            showCancelButton
+                            onConfirm={() => this.handleChangeOrderStatus()}
+                            onCancel={() => this.setState({ showConfirmChangeStatus: false })} />     
                     </div>
 
                 </div>
@@ -306,6 +357,7 @@ const mapDispatchToProps = dispatch => {
         onFetchData: (page, size, startDate, endDate, orderStatus) => dispatch(actions.getOrdersStaff(page, size, startDate, endDate, orderStatus)),
         onGetCancelReason: (orderId) => dispatch(actions.getCancelReasonStaff(orderId)),
         onCancelOrder: (reason, cancelId) => dispatch(actions.cancelOrder(reason,cancelId)),
+        onChangeOrderStatus: (orderId, newStatus) => dispatch(actions.changeOrderStatusStaff(orderId,newStatus)),
     }
 }
 
