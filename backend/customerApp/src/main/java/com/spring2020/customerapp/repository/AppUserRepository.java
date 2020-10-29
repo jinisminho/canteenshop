@@ -24,4 +24,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
                                         Pageable pageable);
 
     Optional<AppUser> findByUsername(String username);
+
+
 }

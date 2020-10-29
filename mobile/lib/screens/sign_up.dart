@@ -258,6 +258,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (response.statusCode == 200) {
       setState(() {
         _isLoading = false;
+        _message = "";
       });
       Duration duration = new Duration(seconds: 5);
       _scaffoldKey.currentState.showSnackBar(new SnackBar(

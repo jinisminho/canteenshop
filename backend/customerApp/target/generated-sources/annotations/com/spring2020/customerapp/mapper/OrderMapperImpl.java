@@ -28,8 +28,8 @@ import org.mapstruct.factory.Mappers;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-04-07T08:50:32+0700",
-    comments = "version: 1.3.1.Final, compiler: javac, environment: Java 11.0.5 (JetBrains s.r.o)"
+    date = "2020-10-27T14:34:55+0700",
+    comments = "version: 1.3.1.Final, compiler: javac, environment: Java 1.8.0_211 (Oracle Corporation)"
 )
 public class OrderMapperImpl implements OrderMapper {
 
@@ -73,6 +73,8 @@ public class OrderMapperImpl implements OrderMapper {
 
         OrderDto orderDto = new OrderDto();
 
+        orderDto.setCreateAt( order.getCreateAt() );
+        orderDto.setUpdateAt( order.getUpdateAt() );
         orderDto.setId( order.getId() );
         orderDto.setLocation( order.getLocation() );
         orderDto.setNote( order.getNote() );
@@ -93,6 +95,8 @@ public class OrderMapperImpl implements OrderMapper {
 
         CustomerOrder customerOrder = new CustomerOrder();
 
+        customerOrder.setCreateAt( order.getCreateAt() );
+        customerOrder.setUpdateAt( order.getUpdateAt() );
         customerOrder.setId( order.getId() );
         customerOrder.setLocation( order.getLocation() );
         customerOrder.setNote( order.getNote() );
@@ -454,7 +458,7 @@ public class OrderMapperImpl implements OrderMapper {
 
         Customer customer = new Customer();
 
-        customer.setId( createOrderDto.getCustomerId() );
+        customer.setId( (int) createOrderDto.getCustomerId() );
 
         return customer;
     }

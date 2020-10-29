@@ -1,11 +1,10 @@
 package com.spring2020.customerapp.service;
 
-import com.spring2020.customerapp.domain.dto.CreateOrderDto;
-import com.spring2020.customerapp.domain.dto.InputCreateOrderDto;
-import com.spring2020.customerapp.domain.dto.OrderDetailDto;
-import com.spring2020.customerapp.domain.dto.OrderDto;
+import com.spring2020.customerapp.domain.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface OrderService {
     OrderDto createOrder(InputCreateOrderDto orderDto);
@@ -14,6 +13,8 @@ public interface OrderService {
 
     OrderDetailDto viewOrderDetail(Long id);
 
-    Page<OrderDto> viewOrderHistory(Pageable pageable, int customerId);
+    List<OrderDto> viewOrderHistory(long customerId);
 
+
+    String cancelOrder(CancelOrderDto dto);
 }

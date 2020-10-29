@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:customerappswd/config/host_config.dart';
 import 'package:http/http.dart' as http;
 
+const String LOGIN_URL = HOST_URL + "/auth/login";
 
 Future<dynamic> checkLogin (String username, password) async{
   var loginUser = {"username": username, "password": password};
   var response = await http.post(
-    "http://10.0.2.2:8057/auth/login",
+    LOGIN_URL,
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

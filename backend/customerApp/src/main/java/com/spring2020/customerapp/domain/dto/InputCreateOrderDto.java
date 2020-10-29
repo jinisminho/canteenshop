@@ -17,7 +17,6 @@ public class InputCreateOrderDto {
     @Length( max = 500, message = "{order.location.length}")
     private String location;
 
-    @NotNull(message = "{order.note.notNull}")
     @Length( max = 500, message = "{order.note.length}")
     private String note;
 
@@ -28,6 +27,5 @@ public class InputCreateOrderDto {
     @Valid
     private List<InputNewOrderDetailDto> orderDetails;
 
-    @NotNull(message = "{order.customerId.notNull}")
-    private int customerId;
+    private long customerId;
 }

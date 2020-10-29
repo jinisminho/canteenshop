@@ -29,7 +29,6 @@ public class CreateOrderDto {
     @Valid
     private List<NewOrderDetailDto> orderDetails;
 
-    @NotNull(message = "{order.customerId.notNull}")
-    private int customerId;
+    private long customerId;
 
 }

@@ -9,12 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Long> {
 
     @Query(value =
-            "SELECT * FROM customer_order WHERE customer_id = :customerId",
-            countQuery = "SELECT count(*) FROM customer_order",
+            "SELECT * FROM customer_order WHERE customer_id = :customerId\n" +
+                    "ORDER BY create_at desc\n" +
+                    "LIMIT 10",
             nativeQuery = true)
-    Page<CustomerOrder> findCustomerOrdersByCustomer(@Param("customerId") int customerId, Pageable pageable);
+    List<CustomerOrder> findCustomerOrdersByCustomer(@Param("customerId") long customerId);
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:customerappswd/api/login_api.dart';
+import 'package:customerappswd/screens/home_page.dart';
 import 'package:customerappswd/screens/sign_up.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,12 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    message = "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
           sharedPreferences.setString(
               "userId", jsonResponse['userId'].toString());
           Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (BuildContext context) => MainPage()),
+              MaterialPageRoute(builder: (BuildContext context) => HomePage()),
               (Route<dynamic> route) => false);
         }else{
             setState(() {

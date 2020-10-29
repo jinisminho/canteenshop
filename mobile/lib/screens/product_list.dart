@@ -24,28 +24,25 @@ class _ProductListPageState extends State<ProductListPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getProductData();
+    getProductData("");
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return ListView.builder(
-        itemCount: (productList == null ||
-                productList.content == null ||
-                productList.content.length == 0)
-            ? 0
-            : productList.content.length,
+        itemCount: productList.content != null ? productList.content.length + 1 : 1,
         itemBuilder: (context, index) {
-          return GestureDetector(
+          return index == 0 ? _searchBar() :
+            GestureDetector(
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return ProductInfo(
-                  id: productList.content[index].id.toString(),
-                  imgUrl: productList.content[index].url_img,
-                  productName: productList.content[index].name,
-                  description: productList.content[index].description,
-                  price: productList.content[index].price,
+                  id: productList.content[index-1].id.toString(),
+                  imgUrl: productList.content[index-1].url_img,
+                  productName: productList.content[index-1].name,
+                  description: productList.content[index-1].description,
+                  price: productList.content[index-1].price,
                 );
               }));
             },
@@ -53,36 +50,22 @@ class _ProductListPageState extends State<ProductListPage> {
               return showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
-                  title: Text(productList.content[index].name),
+                  title: Text(productList.content[index-1].name),
                   content: Text('Content'),
                 ),
                 barrierDismissible: true,
               );
             },
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListTile(
-                  title: Text(productList.content[index].name),
-                  trailing: Text(
-//                        productList.content[index].price.toString() + ' VND'),
-                      new FlutterMoneyFormatter(
-                                  amount: productList.content[index].price)
-                              .output
-                              .withoutFractionDigits +
-                          " VND"),
-                  subtitle: Text(productList.content[index].category.name),
-                ),
-              ),
-            ),
+            child: getCard(index-1)
           );
+
         });
   }
 
-  void getProductData() async {
+  void getProductData(search) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (sharedPreferences.get("accessToken") != null) {
-      var result = await ProductAPI().getProductList();
+      var result = await ProductAPI().getProductList(search);
       var productMap = json.decode(result);
       setState(() {
         productList = Content.fromJson(productMap);
@@ -90,11 +73,40 @@ class _ProductListPageState extends State<ProductListPage> {
     }
   }
 
-  void getCategoryData() async {
-    var result = await ProductAPI().getProductList();
-    var productMap = json.decode(result);
-    setState(() {
-      productList = Content.fromJson(productMap);
-    });
+
+  Widget getCard(index){
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListTile(
+          title: Text(productList.content[index].name),
+          trailing: Text(
+//                        productList.content[index].price.toString() + ' VND'),
+              new FlutterMoneyFormatter(
+                  amount: productList.content[index].price)
+                  .output
+                  .withoutFractionDigits +
+                  " VND"),
+          subtitle: Text(productList.content[index].category.name),
+        ),
+      ),
+    );
   }
+
+   _searchBar(){
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+         decoration: InputDecoration(
+           hintText: "Search..."
+         ),
+        onSubmitted: (text){
+           text = text.toLowerCase();
+           getProductData(text);
+        },
+      ),
+    );
+   }
+
+
 }

@@ -1,5 +1,6 @@
 package com.spring2020.customerapp.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
+public class OrderDto  extends  AuditDTO{
 
     private Long id;
 
@@ -25,8 +26,8 @@ public class OrderDto {
     private List<OrderDetailDto> orderDetails;
 
     private OrderStatusDto status;
-
+    @JsonIgnore
     private StaffDto staff;
-
+    @JsonIgnore
     private CustomerDto customer;
 }
