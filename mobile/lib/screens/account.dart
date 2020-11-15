@@ -24,10 +24,13 @@ class _AccountPageState extends State<AccountPage> {
   TextEditingController phoneController = new TextEditingController();
   TextEditingController genderController = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(),
       body: generateProfileList(),
     );
@@ -56,6 +59,12 @@ class _AccountPageState extends State<AccountPage> {
       var response = await updateCustomerProfile(
           int.parse(sharedPreferences.get("userId")), profile);
       if (response.statusCode == 200) {
+        Duration duration = new Duration(seconds: 5);
+        _scaffoldKey.currentState.showSnackBar(new SnackBar(
+            content:
+            Text("Profile Updated"),
+            backgroundColor: Colors.black,
+            duration: duration));
           _message = "Updated";
       } else {
         setState(() {

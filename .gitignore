@@ -30,3 +30,5 @@ backend/staffWebApp/.project
 backend/staffWebApp/.settings/
 
 .idea/
+
+backend/staffWebApp/target/
