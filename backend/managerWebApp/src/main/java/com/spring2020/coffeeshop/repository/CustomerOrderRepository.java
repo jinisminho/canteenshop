@@ -13,7 +13,7 @@ public interface CustomerOrderRepository extends JpaRepository<CustomerOrder, Lo
 
 
     @Query(value =
-            "SELECT * FROM customer_order WHERE create_at between :startDate and :endDate",
+            "SELECT * FROM customer_order WHERE create_at between :startDate and :endDate + interval 1 day",
             countQuery = "SELECT count(*) FROM customer_order",
             nativeQuery = true)
     Page<CustomerOrder> findOrderInPeriod(@Param("startDate") String startDate,
