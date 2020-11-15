@@ -164,6 +164,21 @@ class Orders extends Component {
                 </div>
             )
         }
+        if (cell.status == "Delivering") {
+            return (
+                <div>
+                    <button className="btn btn-fill btn-info" onClick={() => this.setState({
+                        showConfirmChangeStatus: true,
+                        orderId: row.id,
+                        newStatus: 'Completed'
+                    })} >Complete</button>
+                    <button className="btn btn-fill btn-danger" onClick={() => this.setState({
+                        showCancelForm: true,
+                        cancelId: row.id
+                    })} >Cancel</button>
+                </div>
+            )
+        }
         if (cell.status != "Canceled" && cell.status != "Completed" ) {
             return (
                 <div>
@@ -237,7 +252,6 @@ class Orders extends Component {
                             <TableHeaderColumn dataField="location" dataAlign="center" width="20%">Location</TableHeaderColumn>
                             <TableHeaderColumn dataField="note" dataAlign="center" width="20%">Note</TableHeaderColumn>
                             <TableHeaderColumn dataField="totalPrice" dataAlign="center" width="10%">Total Price</TableHeaderColumn>
-                            <TableHeaderColumn dataField="staff" dataAlign="center" dataFormat={this.showStaffName} width="20%">Staff</TableHeaderColumn>
                             <TableHeaderColumn dataField="orderDetails" dataAlign="center" dataFormat={this.showDetail} width="10%">Detail</TableHeaderColumn>
                             <TableHeaderColumn dataField='status' dataAlign="center" dataFormat={this.showStatus} width="10%">Status</TableHeaderColumn>
                             <TableHeaderColumn dataField='status' dataAlign="center" dataFormat={this.activeFormatter} width="15%">Action</TableHeaderColumn>
